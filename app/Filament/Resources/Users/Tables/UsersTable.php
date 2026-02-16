@@ -16,7 +16,7 @@ class UsersTable
         return $table
             ->columns([
                 ImageColumn::make('profileurl')
-                ->label('profile'),
+                    ->label('profile'),
                 TextColumn::make('full_name')
                     ->label('Full Name')
                     ->searchable(['firstname', 'middlename', 'lastname'])
@@ -25,14 +25,15 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
                 TextColumn::make('username')
                     ->label('User name')
                     ->searchable(),
                 TextColumn::make('role')
                     ->searchable(),
+                TextColumn::make('email_verified_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
