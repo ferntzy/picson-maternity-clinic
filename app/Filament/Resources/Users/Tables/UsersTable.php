@@ -15,6 +15,19 @@ class UsersTable
     {
         return $table
             ->columns([
+                ImageColumn::make('pfp_url')
+                    ->label('Profile Picture')
+                    ->disk('public')
+                    ->visibility('public')
+                    ->circular()
+                    ->size(50)
+                    ->defaultImageUrl(asset('images/default-avatar.svg'))  // use asset() helper
+                    ->extraImgAttributes(['loading' => 'lazy'])            // performance
+                    ->getStateUsing(function ($record) {
+                        // Optional: if your path is stored without 'avatars/' or wrong format
+                        $path = $record->pfp_url;
+                        return $path ? $path : null;  // or fix path here if needed
+                    }),
                 ImageColumn::make('profileurl')
                     ->label('profile'),
                 TextColumn::make('full_name')
@@ -30,10 +43,6 @@ class UsersTable
                     ->searchable(),
                 TextColumn::make('role')
                     ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
