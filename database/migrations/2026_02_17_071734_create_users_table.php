@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         if (Schema::hasTable('users')) {
@@ -17,23 +14,30 @@ return new class extends Migration
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('email', 255)->nullable();
-            $table->text('password')->nullable();
-            $table->string('firstname', 255)->nullable();
-            $table->string('middlename', 255)->nullable();
-            $table->string('lastname', 255)->nullable();
-            $table->string('pfp_url', 255)->nullable();
-            $table->unsignedBigInteger('patient_id')->nullable();
+
+            $table->string('firstname', 100);
+            $table->string('middlename', 100)->nullable();
+            $table->string('lastname', 100);
+            $table->string('username', 100)->unique()->nullable();
+            $table->string('email', 255)->unique()->nullable();
+            $table->string('password', 255)->nullable();
+            $table->string('contact_num', 45)->nullable();
+            $table->string('avatar', 255)->nullable();
+            $table->foreignId('patient_id')
+                  ->nullable()
+                  ->constrained('patients')
+                  ->nullOnDelete();
             $table->string('role', 45)->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->timestamp('deleted_at')->nullable();
+            $table->string('google_id', 255)->nullable()->unique();
+            $table->string('google_token', 255)->nullable();
+            $table->string('google_refresh_token', 255)->nullable();
+            $table->timestamp('google_token_expires_at')->nullable();
+
+            $table->rememberToken();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
