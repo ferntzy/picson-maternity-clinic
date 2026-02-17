@@ -103,4 +103,10 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return $this->hasMany(Patient::class, 'users_id');
     }
+
+    public function getFullNameAttribute(): string
+    {
+        return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
+    }
+
 }

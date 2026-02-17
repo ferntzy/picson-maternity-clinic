@@ -38,7 +38,7 @@ class PatientForm
                 TextInput::make('living_children')->numeric(),
 
                 // Automatically record the nurse/admin creating this patient
-                Hidden::make('users_id')->default(fn () => auth()?->id),
+                Hidden::make('users_id')->default(fn () => auth()->id()),
             ]);
     }
 }

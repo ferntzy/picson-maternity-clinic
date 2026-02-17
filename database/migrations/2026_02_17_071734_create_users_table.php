@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('avatar', 255)->nullable();
             $table->foreignId('patient_id')
                   ->nullable()
-                  ->constrained('patients')
+                  ->constrained('patient')
                   ->nullOnDelete();
             $table->string('role', 45)->nullable();
             $table->string('google_id', 255)->nullable()->unique();
