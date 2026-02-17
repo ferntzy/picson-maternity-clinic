@@ -9,18 +9,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
+        'id',
+        'email',
+        'password',
         'firstname',
         'middlename',
         'lastname',
-        'email',
-        'password',
-        'role',
+        'patient_id',
         'username',
         'contact_num',
         'avatar',
@@ -29,7 +31,7 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     protected $hidden = [
         'password',
-        'remember_token',
+        // 'remember_token',
     ];
 
     public function getFilamentName(): string
@@ -76,15 +78,29 @@ class User extends Authenticatable implements FilamentUser, HasName
             }
         );
     }
- public function canAccessPanel(Panel $panel): bool
+
+    public function canAccessPanel(Panel $panel): bool
     {
         return true;
     }
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            // 'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // If this user is linked to a patient
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+
+    // If this user is a nurse/admin and created patients
+    public function createdPatients()
+    {
+        return $this->hasMany(Patient::class, 'users_id');
     }
 }
