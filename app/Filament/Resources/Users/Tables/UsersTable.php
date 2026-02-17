@@ -15,21 +15,13 @@ class UsersTable
     {
         return $table
             ->columns([
-                ImageColumn::make('pfp_url')
+                ImageColumn::make('avatar')
                     ->label('Profile Picture')
                     ->disk('public')
-                    ->visibility('public')
                     ->circular()
                     ->size(50)
-                    ->defaultImageUrl(asset('images/default-avatar.svg'))  // use asset() helper
-                    ->extraImgAttributes(['loading' => 'lazy'])            // performance
-                    ->getStateUsing(function ($record) {
-                        // Optional: if your path is stored without 'avatars/' or wrong format
-                        $path = $record->pfp_url;
-                        return $path ? $path : null;  // or fix path here if needed
-                    }),
-                ImageColumn::make('profileurl')
-                    ->label('profile'),
+                     ->defaultImageUrl(asset('images/default-avatar.svg'))
+                    ->extraImgAttributes(['loading' => 'lazy']),
                 TextColumn::make('full_name')
                     ->label('Full Name')
                     ->searchable(['firstname', 'middlename', 'lastname'])

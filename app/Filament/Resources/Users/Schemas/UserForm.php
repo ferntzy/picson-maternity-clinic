@@ -41,19 +41,24 @@ class UserForm
                                     ->maxLength(100),
                             ])
                             ->columns(3),
-
-                        // Profile picture
                         FileUpload::make('avatar')
                             ->label('Profile Picture')
                             ->image()
                             ->imageEditor()
                             ->avatar()
-                            ->preserveFilenames(false)
                             ->directory('avatars')
                             ->disk('public')
+                            ->visibility('public')
+                            ->preserveFilenames(false)
                             ->imagePreviewHeight('220')
                             ->nullable()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+
+                            ->dehydrateStateUsing(
+                                fn($state) => $state instanceof \Illuminate\Http\UploadedFile
+                                    ? $state->store('avatars', 'public')
+                                    : $state
+                            ),
                     ]),
 
                 ComponentsSection::make('Account Information')
