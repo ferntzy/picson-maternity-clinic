@@ -65,6 +65,8 @@ class PatientsTable
                 ->label('New Patient')
                 ->icon('heroicon-o-user-plus')
                 ->modalHeading('Add New Patient')
+                ->modalDescription('Please fill in the patient information below.')
+                ->modalWidth('3xl')
                 ->modalSubmitActionLabel('Save Patient')
                 ->schema(fn ($form) => PatientForm::configure($form))
             ]);
