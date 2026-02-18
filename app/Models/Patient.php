@@ -37,10 +37,19 @@ class Patient extends Model
     {
         return $this->belongsTo(User::class, 'users_id');
     }
-
+    // Alias for creator
+    public function user()
+    {
+        return $this->creator();
+    }
     // The patient’s own user account
     public function userAccount()
     {
         return $this->hasOne(User::class, 'patient_id');
     }
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class,'patient_id');
+    }
+
 }
