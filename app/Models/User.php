@@ -24,6 +24,8 @@ class User extends Authenticatable implements FilamentUser, HasName
         'username',
         'contact_num',
         'avatar',
+        'role',
+
     ];
 
     protected $hidden = ['password'];
@@ -46,7 +48,17 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     public function getFilamentName(): string
     {
-        return trim("{$this->firstname} {$this->lastname}");
+        $role = strtolower(trim($this->role ?? ''));
+
+        return match ($panel->getId()) {
+            'auth'     => true, // allow login panel always
+            'director' => $role === 'director',
+            'admin'    => $role === 'admin',
+            'doctor'   => $role === 'doctor',
+            'nurse'    => $role === 'nurse',
+            'patient'   => $role === 'patient',
+            default    => false,
+        };
     }
 
     protected function casts(): array
