@@ -29,11 +29,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     protected $hidden = ['password'];
 
     /**
-     * If this user is a patient
+     * The patient record this user account belongs to
      */
     public function patient()
     {
-        return $this->hasOne(Patient::class, 'users_id');
+        return $this->belongsTo(Patient::class, 'patient_id');
     }
 
     /**
