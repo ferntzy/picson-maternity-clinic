@@ -18,39 +18,34 @@ class AdmissionForm
             ->components([
                 // Patient Selection (Always visible)
                 Grid::make(12)->components([
-                    Select::make('patient_id')
-    ->label('Patient')
-    ->placeholder('Search by name, email, or contact number')
-    ->searchable()
-    ->getSearchResultsUsing(function (string $search) {
-        return Patient::where(function($query) use ($search) {
-            $query->whereHas('userAccount', function ($q) use ($search) {
-                $q->where('firstname', 'LIKE', "%{$search}%")
-                  ->orWhere('lastname', 'LIKE', "%{$search}%")
-                  ->orWhere('email', 'LIKE', "%{$search}%")
-                  ->orWhere('contact_num', 'LIKE', "%{$search}%"); // search User contact
-            })
-            ->orWhere('contact_number', 'LIKE', "%{$search}%"); // search Patient contact
-        })
-        ->limit(50)
-        ->get()
-        ->mapWithKeys(function ($patient) {
-            $label = $patient->userAccount?->getFilamentName() 
-                     ?? $patient->contact_number 
-                     ?? 'Patient #' . $patient->id;
-            return [$patient->id => $label];
-        })
-        ->toArray();
-    })
-    ->getOptionLabelUsing(fn($value) => 
-        Patient::find($value)?->userAccount?->getFilamentName() 
-        ?? 'Patient #' . $value
-    )
-    ->required()
-    ->columnSpan(12)
+                Select::make('patient_id')
+                ->label('Patient')
+                ->placeholder('Search by name')
+                ->searchable()
+                ->getSearchResultsUsing(function (string $search) {
+                    return Patient::where(function($query) use ($search) {
+                        $query->whereHas('user', function ($q) use ($search) {
+                            $q->where('firstname', 'LIKE', "%{$search}%")
+                            ->orWhere('lastname', 'LIKE', "%{$search}%"); // search User contact
+                        });
+                    })
+                    ->limit(50)
+                    ->get()
+                    ->mapWithKeys(function ($patient) {
+                        $label = $patient->user?->getFilamentName();
+                        return [$patient->id => $label];
+                    })
+                    ->toArray();
+                })
+                ->getOptionLabelUsing(fn($value) => 
+                    Patient::find($value)?->userAccount?->getFilamentName() 
+                    ?? 'Patient #' . $value
+                )
+                ->required()
+                ->columnSpan(12)
 
-                ]),
-            ]);
+            ]),
+        ]);
     }
 
     /**

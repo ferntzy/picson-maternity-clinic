@@ -25,16 +25,16 @@ class AdmissionsTable
     {
         return $table
             ->columns([
-                TextColumn::make('patient.userAccount.firstname')
+                TextColumn::make('patient.user.firstname')
                     ->label('Patient Name')
                     ->getStateUsing(fn ($record) =>
-                        $record->patient?->userAccount
-                            ? "{$record->patient->userAccount->firstname} {$record->patient->userAccount->lastname}"
+                        $record->patient?->user
+                            ? "{$record->patient->user->firstname} {$record->patient->user->lastname}"
                             : 'N/A'
                     )
                     ->searchable(
                         query: function (Builder $query, string $search): Builder {
-                            return $query->whereHas('patient.userAccount', function (Builder $q) use ($search) {
+                            return $query->whereHas('patient.user', function (Builder $q) use ($search) {
                                 $q->where('firstname', 'like', "%{$search}%")
                                     ->orWhere('lastname', 'like', "%{$search}%");
                             });
@@ -127,7 +127,7 @@ class AdmissionsTable
             )
             ->headerActions([
                CreateAction::make('new_admission')
-                ->label('New Admission')
+                ->label('New Admission')  
                 ->icon('heroicon-o-user-plus')
                 ->modalHeading('Add New Admission')
                 ->modalDescription('Please fill in the admission information below.')
