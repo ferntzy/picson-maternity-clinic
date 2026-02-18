@@ -78,3 +78,37 @@
 .patient-card__full-width {
     grid-column: span 2;
 }
+
+.patient-card__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.patient-card__header-info {
+    flex: 1;
+}
+
+.patient-card__header-actions {
+    margin-left: auto;
+}
+
+.patient-card__admission-btn {
+    display: inline-block;
+    background-color: #0284c7;
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.patient-card__admission-btn:hover {
+    background-color: #0369a1;
+    color: #ffffff;
+}

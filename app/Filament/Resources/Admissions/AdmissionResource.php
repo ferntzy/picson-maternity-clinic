@@ -26,12 +26,6 @@ class AdmissionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'admission';
 
-    public static function getHeaderActions(): array
-    {
-        // Return an empty array to remove the default top-right button
-        return [];
-    }
-
     public static function form(Schema $schema): Schema
     {
         return AdmissionForm::configure($schema);
