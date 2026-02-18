@@ -22,26 +22,36 @@ class PatientsTable
     {
         return $table
             ->columns([
-                TextColumn::make('userAccount.full_name')
+
+                TextColumn::make('user.firstname')
                     ->label('Patient Name')
                     ->getStateUsing(fn ($record) =>
-                        $record->userAccount
-                            ? "{$record->userAccount->firstname} {$record->userAccount->lastname}"
+                        $record->user
+                            ? trim("{$record->user->firstname} {$record->user->middlename} {$record->user->lastname}")
                             : 'No Name'
                     )
                     ->searchable(
                         query: function (Builder $query, string $search): Builder {
-                            return $query->whereHas('userAccount', function (Builder $q) use ($search) {
+                            return $query->whereHas('user', function (Builder $q) use ($search) {
                                 $q->where('firstname', 'like', "%{$search}%")
                                 ->orWhere('middlename', 'like', "%{$search}%")
                                 ->orWhere('lastname', 'like', "%{$search}%");
                             });
                         }
                     ),
-                TextColumn::make('address')->label('Address')->extraAttributes(['class' => 'font-poppins text-2xl']),
-                TextColumn::make('contact_number')->label('Contact Number'),
-                TextColumn::make('spouse_name')->label('Emergency Contact Name'),
-                TextColumn::make('spouse_contact_number')->label('Emergency Contact Number')
+
+                TextColumn::make('user.contact_num')  // <-- was contact_number, fix to contact_num
+                    ->label('Contact Number'),
+                /** Address (patient table) */
+                TextColumn::make('address')
+                    ->label('Address')
+                    ->wrap(),
+                /** Emergency Contact */
+                TextColumn::make('spouse_name')
+                    ->label('Emergency Contact Name'),
+
+                TextColumn::make('spouse_contact_number')
+                    ->label('Emergency Contact Number'),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -58,17 +68,21 @@ class PatientsTable
                 ]),
             ])
             ->heading(
-                new HtmlString('<h1 style="font-family: Poppins, sans-serif; font-weight: 700; font-size: 2.0rem;">Patients</h1>')
+                new HtmlString(
+                    '<h1 style="font-family: Poppins, sans-serif; font-weight: 700; font-size: 2rem;">
+                        Patients
+                     </h1>'
+                )
             )
             ->headerActions([
-               CreateAction::make('new_patient')
-                ->label('New Patient')
-                ->icon('heroicon-o-user-plus')
-                ->modalHeading('Add New Patient')
-                ->modalDescription('Please fill in the patient information below.')
-                ->modalWidth('3xl')
-                ->modalSubmitActionLabel('Save Patient')
-                ->schema(fn ($form) => PatientForm::configure($form))
+                CreateAction::make('new_patient')
+                    ->label('New Patient')
+                    ->icon('heroicon-o-user-plus')
+                    ->modalHeading('Add New Patient')
+                    ->modalDescription('Please fill in the patient information below.')
+                    ->modalWidth('6xl')
+                    ->modalSubmitActionLabel('Save Patient')
+                    ->schema(fn ($form) => PatientForm::configure($form)),
             ]);
     }
 }

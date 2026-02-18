@@ -23,21 +23,17 @@ return new class extends Migration
             $table->string('civil_status')->nullable();
             $table->string('religion')->nullable();
             $table->string('nationality')->nullable();
-            $table->string('contact_number')->nullable();
             $table->string('birth_date')->nullable();
             $table->string('spouse_name')->nullable();
             $table->string('spouse_contact_number')->nullable();
             $table->string('philhealth_number')->nullable();
             $table->string('blood_type')->nullable();
-            $table->string('allergies')->nullable();
-            $table->integer('gravida')->nullable();
-            $table->integer('term_birth')->nullable();
-            $table->integer('pre_term_birth')->nullable();
-            $table->integer('abortion')->nullable();
-            $table->integer('living_children')->nullable();
+            $table->string('allergies')->nullable();            
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
-            $table->unsignedBigInteger('users_id');
+            $table->softDeletes();
+            $table->foreignId('users_id')
+              ->constrained('users')
+              ->cascadeOnDelete();
         });
     }
 

@@ -9,43 +9,44 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Patient extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $table = 'patient';
+
     protected $fillable = [
+        'users_id',
         'address',
         'sex',
         'birth_place',
         'civil_status',
         'religion',
         'nationality',
-        'contact_number',
         'birth_date',
         'spouse_name',
         'spouse_contact_number',
         'philhealth_number',
         'blood_type',
         'allergies',
-        'gravida',
-        'term_birth',
-        'pre_term_birth',
-        'abortion',
-        'living_children',
-        'users_id',
     ];
 
-    // Who created this patient record
-    public function creator()
+    /**
+     * The user account of the patient (role: patient)
+     */
+    public function user()
     {
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->hasOne(User::class, 'patient_id', 'id');
     }
     // Alias for creator
-    public function user()
+    public function users()
     {
         return $this->creator();
     }
-    // The patient’s own user account
-    public function userAccount()
+   
+    /**
+     * The nurse who created this patient record
+     */
+    public function creator()
     {
-        return $this->hasOne(User::class, 'patient_id');
+        return $this->belongsTo(User::class, 'users_id');
     }
     public function admissions()
     {

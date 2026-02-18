@@ -26,6 +26,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'username',
         'contact_num',
         'avatar',
+        'role',
 
     ];
 
@@ -34,6 +35,14 @@ class User extends Authenticatable implements FilamentUser, HasName
         // 'remember_token',
     ];
 
+    /**
+     * The patient record this user account belongs to
+     */
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+  
     public function getFilamentName(): string
     {
         $first = trim($this->firstname ?? '');
@@ -81,7 +90,17 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        $role = strtolower(trim($this->role ?? ''));
+
+        return match ($panel->getId()) {
+            'auth'     => true, // allow login panel always
+            'director' => $role === 'director',
+            'admin'    => $role === 'admin',
+            'doctor'   => $role === 'doctor',
+            'nurse'    => $role === 'nurse',
+            'patient'   => $role === 'patient',
+            default    => false,
+        };
     }
 
     protected function casts(): array
@@ -108,5 +127,4 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
     }
-
 }
