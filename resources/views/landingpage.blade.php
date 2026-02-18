@@ -22,7 +22,7 @@
                     <a href="#appointment">Appointment</a>
                     <a href="#contact">Contact</a>
                 </nav>
-                <a href="{{ url('/admin/login') }}">
+                <a href="{{ url('/pmc/login') }}">
                     <button class="signin-btn">Sign In</button>
                 </a>
 
