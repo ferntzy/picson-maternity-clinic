@@ -35,11 +35,6 @@ class Patient extends Model
     {
         return $this->hasOne(User::class, 'patient_id', 'id');
     }
-    // Alias for creator
-    // public function users()
-    // {
-    //     return $this->creator();
-    // }
     /**
      * The nurse who created this patient record
      */
