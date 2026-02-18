@@ -52,9 +52,10 @@ class DirectorPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                'role:director',
+                // 'role:director',
             ])
-            ->tenantMiddleware([
-           ], isPersistent: true);
+        //     ->tenantMiddleware([
+        //    ], isPersistent: true)
+           ;
     }
 }

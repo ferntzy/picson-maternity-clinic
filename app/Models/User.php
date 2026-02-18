@@ -26,6 +26,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'username',
         'contact_num',
         'avatar',
+        'role',
 
     ];
 
@@ -81,7 +82,17 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        $role = strtolower(trim($this->role ?? ''));
+
+        return match ($panel->getId()) {
+            'auth'     => true, // allow login panel always
+            'director' => $role === 'director',
+            'admin'    => $role === 'admin',
+            'doctor'   => $role === 'doctor',
+            'nurse'    => $role === 'nurse',
+            'patient'   => $role === 'patient',
+            default    => false,
+        };
     }
 
     protected function casts(): array
@@ -108,5 +119,4 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
     }
-
 }

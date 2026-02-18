@@ -24,22 +24,17 @@ class AuthPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->default()
             ->id('auth')
-            ->path('pmc')
+            ->path('')
             ->login()
             ->colors([
                 'primary' => '#f54e25',         // blue or your brand color
             ])
-            ->discoverResources(in: app_path('Filament/Auth/Resources'), for: 'App\Filament\Auth\Resources')
-            ->discoverPages(in: app_path('Filament/Auth/Pages'), for: 'App\Filament\Auth\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Auth/Widgets'), for: 'App\Filament\Auth\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-            ])
+            ->discoverPages(in: app_path('Filament/Auth/Pages'), for: 'App\\Filament\\Auth\\Pages') // or keep empty if no pages
+            ->pages([]) // ensure no Dashboard
+            ->discoverWidgets(in: app_path('Filament/Auth/Widgets'), for: 'App\\Filament\\Auth\\Widgets')
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
