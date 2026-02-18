@@ -16,13 +16,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
-        'id',
         'email',
         'password',
         'firstname',
         'middlename',
         'lastname',
-        'patient_id',
         'username',
         'contact_num',
         'avatar',
@@ -30,57 +28,25 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     ];
 
-    protected $hidden = [
-        'password',
-        // 'remember_token',
-    ];
+    protected $hidden = ['password'];
+
+    /**
+     * If this user is a patient
+     */
+    public function patient()
+    {
+        return $this->hasOne(Patient::class, 'users_id');
+    }
+
+    /**
+     * If this user is a nurse/admin who created patients
+     */
+    public function createdPatients()
+    {
+        return $this->hasMany(Patient::class, 'users_id');
+    }
 
     public function getFilamentName(): string
-    {
-        $first = trim($this->firstname ?? '');
-        $last  = trim($this->lastname ?? '');
-        $middleRaw = trim($this->middlename ?? '');
-
-        if (empty($first) && empty($last)) {
-            return $this->email ?: ('User #' . $this->id);
-        }
-
-        $middleInitials = '';
-        if ($middleRaw !== '') {
-            // Split on spaces (handles multiple middle names)
-            $middleParts = preg_split('/\s+/', $middleRaw, -1, PREG_SPLIT_NO_EMPTY);
-            $initials = array_map(fn($part) => strtoupper(substr($part, 0, 1)) . '.', $middleParts);
-            $middleInitials = ' ' . implode(' ', $initials);
-        }
-
-        return trim("{$first}{$middleInitials} {$last}");
-    }
-
-    protected function fullName(): Attribute
-    {
-        return Attribute::make(
-            get: function (): string {
-                $first = trim($this->firstname ?? '');
-                $last  = trim($this->lastname ?? '');
-                $middleRaw = trim($this->middlename ?? '');
-
-                if (empty($first) && empty($last)) {
-                    return $this->email ?: ('User #' . $this->id);
-                }
-
-                $middleInitials = '';
-                if ($middleRaw !== '') {
-                    $middleParts = preg_split('/\s+/', $middleRaw, -1, PREG_SPLIT_NO_EMPTY);
-                    $initials = array_map(fn($part) => strtoupper(substr($part, 0, 1)) . '.', $middleParts);
-                    $middleInitials = ' ' . implode(' ', $initials);
-                }
-
-                return trim("{$first}{$middleInitials} {$last}");
-            }
-        );
-    }
-
-    public function canAccessPanel(Panel $panel): bool
     {
         $role = strtolower(trim($this->role ?? ''));
 
@@ -98,25 +64,12 @@ class User extends Authenticatable implements FilamentUser, HasName
     protected function casts(): array
     {
         return [
-            // 'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    // If this user is linked to a patient
-    public function patient()
+    public function canAccessPanel(Panel $panel): bool
     {
-        return $this->belongsTo(Patient::class, 'patient_id');
-    }
-
-    // If this user is a nurse/admin and created patients
-    public function createdPatients()
-    {
-        return $this->hasMany(Patient::class, 'users_id');
-    }
-
-    public function getFullNameAttribute(): string
-    {
-        return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
+        return true;
     }
 }
