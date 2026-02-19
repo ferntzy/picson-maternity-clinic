@@ -25,10 +25,8 @@ return new class extends Migration
             $table->string('password', 255)->nullable();
             $table->string('contact_num', 45)->nullable();
             $table->string('avatar', 255)->nullable();
-            $table->foreignId('patient_id')
-                  ->nullable()
-                  ->constrained('patient')
-                  ->nullOnDelete();
+            $table->unsignedBigInteger('patient_id')->nullable();
+
             $table->string('role', 45)->nullable();
             $table->string('google_id', 255)->nullable()->unique();
             $table->string('google_token', 255)->nullable();

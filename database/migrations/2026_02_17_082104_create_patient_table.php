@@ -31,9 +31,9 @@ return new class extends Migration
             $table->string('allergies')->nullable();            
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('users_id')
-              ->constrained('users')
-              ->cascadeOnDelete();
+            $table->unsignedBigInteger('users_id')->nullable();
+            //   ->constrained('users')
+            //   ->cascadeOnDelete();
         });
     }
 
