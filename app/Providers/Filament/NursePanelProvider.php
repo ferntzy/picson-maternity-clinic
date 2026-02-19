@@ -31,8 +31,9 @@ class NursePanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Nurse/Resources'), for: 'App\Filament\Nurse\Resources')
             ->discoverPages(in: app_path('Filament/Nurse/Pages'), for: 'App\Filament\Nurse\Pages')
-            ->pages([
+             ->pages([
                 Dashboard::class,
+                \App\Filament\Pages\Profile::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Nurse/Widgets'), for: 'App\Filament\Nurse\Widgets')
             ->widgets([

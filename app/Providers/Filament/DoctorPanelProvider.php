@@ -31,8 +31,9 @@ class DoctorPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Doctor/Resources'), for: 'App\Filament\Doctor\Resources')
             ->discoverPages(in: app_path('Filament/Doctor/Pages'), for: 'App\Filament\Doctor\Pages')
-            ->pages([
+             ->pages([
                 Dashboard::class,
+                \App\Filament\Pages\Profile::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Doctor/Widgets'), for: 'App\Filament\Doctor\Widgets')
             ->widgets([
