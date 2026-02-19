@@ -11,33 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('users')) {
-            return;
-        }
-
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname', 100)->nullable();
-            $table->string('middlename', 100)->nullable();
-            $table->string('lastname', 100)->nullable();
-            $table->string('username', 100)->nullable();
             $table->string('email', 255)->nullable();
-            $table->string('password', 255)->nullable();
-            $table->string('contact_num', 45)->nullable();
+            $table->text('password')->nullable();
+            $table->string('firstname', 255)->nullable();
+            $table->string('middlename', 255)->nullable();
+            $table->string('lastname', 255)->nullable();
             $table->string('avatar', 255)->nullable();
-            $table->foreignId('patient_id')
-                  ->nullable()
-                  ->constrained('patient')
-                  ->nullOnDelete();
+            $table->unsignedBigInteger('patient_id')->nullable();
             $table->string('role', 45)->nullable();
-            $table->string('google_id', 255)->nullable()->unique();
-            $table->string('google_token', 255)->nullable();
-            $table->string('google_refresh_token', 255)->nullable();
-            $table->timestamp('google_token_expires_at')->nullable();
-            $table->rememberToken();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes();
+            $table->timestamps(); // creates created_at and updated_at
+            $table->softDeletes(); // creates deleted_at
+            $table->string('contact_num', 255)->nullable();
         });
     }
 

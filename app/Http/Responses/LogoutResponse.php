@@ -10,6 +10,6 @@ class LogoutResponse implements LogoutResponseContract
     public function toResponse($request): RedirectResponse
     {
 
-        return redirect()->to('/'); // root
+        return redirect()->to('/');
     }
 }

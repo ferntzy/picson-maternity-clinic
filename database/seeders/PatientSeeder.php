@@ -17,7 +17,6 @@ class PatientSeeder extends Seeder
     {
         // First, create the patient record
         $patient = Patient::firstOrCreate(
-            ['contact_number' => '09123456789'], // unique identifier to prevent duplicates
             [
                 'address'                => '123 Main St, Cityville',
                 'sex'                    => 'Male',
@@ -25,25 +24,19 @@ class PatientSeeder extends Seeder
                 'civil_status'           => 'Single',
                 'religion'               => 'None',
                 'nationality'            => 'Filipino',
-                'contact_number'         => '09123456789',
                 'birth_date'             => '1990-01-01',
-                'spouse_name'            => null,
-                'spouse_contact_number'  => null,
+                'spouse_name'            => 'Vejee Laniog',
+                'spouse_contact_number'  => '09887656744',
                 'philhealth_number'      => 'PH123456789',
                 'blood_type'             => 'O+',
                 'allergies'              => 'None',
-                'gravida'                => 0,
-                'term_birth'             => 0,
-                'pre_term_birth'         => 0,
-                'abortion'               => 0,
-                'living_children'        => 0,
                 'users_id'               => 1, // assuming admin user ID 1 created this patient
             ]
         );
 
         // Then, create a user account for the patient
         User::firstOrCreate(
-            ['email' => 'johndoe@example.com'],
+            ['email' => 'johndamn@example.com'],
             [
                 'firstname'   => 'John',
                 'middlename'  => 'B',
@@ -51,6 +44,7 @@ class PatientSeeder extends Seeder
                 'password'    => Hash::make('password123'),
                 'role'        => 'patient',
                 'patient_id'  => $patient->id, // link to patient record
+                'contact_num' => '09123456789'
             ]
         );
     }

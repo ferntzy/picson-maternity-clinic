@@ -44,7 +44,7 @@ class EditAdmission extends EditRecord
                                 ->columnSpan(12),
                         ]),
                     ]),
-
+                //Admission Consent Form Fields
                 Section::make('Admission Details')
                     ->visible(fn ($get) => $get('form_type') === 'admission_consent')
                     ->schema([
@@ -56,7 +56,6 @@ class EditAdmission extends EditRecord
 
                            
                         ]),
-
 
                     ]),
                         
@@ -137,6 +136,19 @@ class EditAdmission extends EditRecord
                                 ->placeholder('Enter referral source details...')
                                 ->columnSpan(6),
                         ]),
+                    ]),
+                    Section::make('Admission Details')
+                    ->visible(fn ($get) => $get('form_type') === 'admission_labor')
+                    ->schema([
+
+                    Grid::make(12)->components([
+                            DateTimePicker::make('date_of_consent')
+                                ->label('Date & Time of Consent')
+                                ->columnSpan(6),
+
+                           
+                        ]),
+
                     ]),
                     
             ]);
