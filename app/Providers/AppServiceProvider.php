@@ -12,11 +12,9 @@ use App\Http\Responses\LogoutResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
+        // Login binding (keep yours)
         $this->app->singleton(
             LoginResponseContract::class,
             LoginResponse::class
@@ -27,9 +25,6 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //
