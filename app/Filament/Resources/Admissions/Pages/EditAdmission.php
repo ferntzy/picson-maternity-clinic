@@ -45,6 +45,21 @@ class EditAdmission extends EditRecord
                         ]),
                     ]),
 
+                Section::make('Admission Details')
+                    ->visible(fn ($get) => $get('form_type') === 'admission_consent')
+                    ->schema([
+
+                    Grid::make(12)->components([
+                            DateTimePicker::make('date_of_consent')
+                                ->label('Date & Time of Consent')
+                                ->columnSpan(6),
+
+                           
+                        ]),
+
+
+                    ]),
+                        
                 // Admission and Discharge Form Fields
                 Section::make('Admission Details')
                     ->visible(fn ($get) => $get('form_type') === 'admission_discharge')
@@ -123,6 +138,7 @@ class EditAdmission extends EditRecord
                                 ->columnSpan(6),
                         ]),
                     ]),
+                    
             ]);
     }
 
