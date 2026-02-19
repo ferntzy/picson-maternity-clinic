@@ -20,9 +20,14 @@ return new class extends Migration
             $table->dateTime('date_time_admitted')->nullable();
             $table->enum('stage_of_labor', ['active', 'not_active'])
                   ->default('active');
-            $table->foreignId('patient_id')
-                ->constrained('patient')  // correct — plural table name
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('patient_id')->nullable();
+
+            $table->integer('gravida')->nullable();    
+            $table->integer('para')->nullable();
+            $table->integer('abortus')->nullable();
+            $table->integer('fullterm')->nullable();
+            $table->integer('preterm')->nullable();
+            $table->integer('living')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
