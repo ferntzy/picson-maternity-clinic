@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('patient')) {
-            return;
-        }
-
         Schema::create('patient', function (Blueprint $table) {
             $table->id();
+<<<<<<< HEAD
             $table->string('address')->nullable();
             $table->string('sex')->nullable();
             $table->string('birth_place')->nullable();
@@ -34,6 +31,28 @@ return new class extends Migration
             $table->unsignedBigInteger('users_id')->nullable();
             //   ->constrained('users')
             //   ->cascadeOnDelete();
+=======
+            $table->string('address', 255)->nullable();
+            $table->string('sex', 255)->nullable();
+            $table->string('birth_place', 255)->nullable();
+            $table->string('civil_status', 255)->nullable();
+            $table->string('religion', 255)->nullable();
+            $table->string('nationality', 255)->nullable();
+            $table->string('birth_date', 255)->nullable();
+            $table->string('spouse_name', 255)->nullable();
+            $table->string('spouse_contact_number', 255)->nullable();
+            $table->string('philhealth_number', 255)->nullable();
+            $table->string('blood_type', 255)->nullable();
+            $table->string('allergies', 255)->nullable();
+            $table->integer('gravida')->nullable();
+            $table->integer('term_birth')->nullable();
+            $table->integer('pre_term_birth')->nullable();
+            $table->integer('abortion')->nullable();
+            $table->integer('living_children')->nullable();
+            $table->timestamps(); // creates created_at and updated_at
+            $table->softDeletes(); // creates deleted_at
+            $table->foreignId('users_id')->constrained('users')->cascadeOnDelete();
+>>>>>>> main
         });
     }
 

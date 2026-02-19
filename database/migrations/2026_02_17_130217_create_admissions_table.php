@@ -21,8 +21,8 @@ return new class extends Migration
             $table->enum('stage_of_labor', ['active', 'not_active'])
                   ->default('active');
             $table->foreignId('patient_id')
-                  ->constrained('patient')
-                  ->onDelete('cascade');
+                ->constrained('patient')  // correct — plural table name
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
