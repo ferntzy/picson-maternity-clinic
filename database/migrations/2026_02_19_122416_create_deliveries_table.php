@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('labor_problems', function (Blueprint $table) {
+        Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
-
-            $table->text('problem')->nullable();
-            $table->time('time_onset')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->dateTime('time_of_delivery')->nullable();
+            $table->string('type_of_delivery')->nullable();
+            $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
+            $table->timestamps();
             $table->softDeletes();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('labor_problems');
+        Schema::dropIfExists('deliveries');
     }
 };

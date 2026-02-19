@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patient', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->id();
+            $table->string('firstname', 255);
+            $table->string('middlename', 255); 
+            $table->string('lastname', 255);
             $table->string('address', 255)->nullable();
             $table->string('sex', 255)->nullable();
             $table->string('birth_place', 255)->nullable();
@@ -20,14 +23,14 @@ return new class extends Migration
             $table->string('religion', 255)->nullable();
             $table->string('nationality', 255)->nullable();
             $table->string('birth_date', 255)->nullable();
-            $table->string('spouse_name', 255)->nullable();
-            $table->string('spouse_contact_number', 255)->nullable();
+            $table->string('emergency_contact_name', 255)->nullable();
+            $table->string('emergency_contact_number', 255)->nullable();
             $table->string('philhealth_number', 255)->nullable();
-            $table->string('blood_type', 255)->nullable();
+            $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->nullable();
             $table->string('allergies', 255)->nullable();
-            $table->timestamps(); // creates created_at and updated_at
-            $table->softDeletes(); // creates deleted_at
-            $table->foreignId('users_id')->constrained('users')->cascadeOnDelete();
+            $table->string('contact_num', 255)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -36,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patient');
+        Schema::dropIfExists('profiles');
     }
 };

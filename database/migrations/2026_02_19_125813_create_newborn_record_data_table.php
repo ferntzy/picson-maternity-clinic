@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deliveries', function (Blueprint $table) {
+        Schema::create('newborn_record_data', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('time_of_delivery')->nullable();
-            $table->string('type_of_delivery')->nullable();
-            $table->foreignId('patient_id')->constrained('patient')->cascadeOnDelete();;
+            $table->foreignId('newborn_id')->nullable()->constrained('newborns')->nullOnDelete();
+            $table->string('assesment_type');
+            $table->string('item');
+            $table->string('value');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deliveries');
+        Schema::dropIfExists('newborn_record_data');
     }
 };
