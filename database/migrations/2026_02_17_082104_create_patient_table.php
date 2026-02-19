@@ -25,11 +25,6 @@ return new class extends Migration
             $table->string('philhealth_number', 255)->nullable();
             $table->string('blood_type', 255)->nullable();
             $table->string('allergies', 255)->nullable();
-            $table->integer('gravida')->nullable();
-            $table->integer('term_birth')->nullable();
-            $table->integer('pre_term_birth')->nullable();
-            $table->integer('abortion')->nullable();
-            $table->integer('living_children')->nullable();
             $table->timestamps(); // creates created_at and updated_at
             $table->softDeletes(); // creates deleted_at
             $table->foreignId('users_id')->constrained('users')->cascadeOnDelete();
