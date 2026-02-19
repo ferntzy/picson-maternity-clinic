@@ -35,6 +35,14 @@ class User extends Authenticatable implements FilamentUser, HasName
         // 'remember_token',
     ];
 
+    /**
+     * The patient record this user account belongs to
+     */
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+  
     public function getFilamentName(): string
     {
         $first = trim($this->firstname ?? '');
@@ -102,13 +110,6 @@ class User extends Authenticatable implements FilamentUser, HasName
             'password' => 'hashed',
         ];
     }
-
-    // If this user is linked to a patient
-    public function patient()
-    {
-        return $this->belongsTo(Patient::class, 'patient_id');
-    }
-
     // If this user is a nurse/admin and created patients
     public function createdPatients()
     {
