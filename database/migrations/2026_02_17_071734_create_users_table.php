@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('firstname', 255)->nullable();
             $table->string('middlename', 255)->nullable();
             $table->string('lastname', 255)->nullable();
-            $table->string('pfp_url', 255)->nullable();
+            $table->string('avatar', 255)->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->string('role', 45)->nullable();
             $table->timestamps(); // creates created_at and updated_at
