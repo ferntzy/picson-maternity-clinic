@@ -13,25 +13,6 @@ return new class extends Migration
     {
         Schema::create('patient', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD
-            $table->string('address')->nullable();
-            $table->string('sex')->nullable();
-            $table->string('birth_place')->nullable();
-            $table->string('civil_status')->nullable();
-            $table->string('religion')->nullable();
-            $table->string('nationality')->nullable();
-            $table->string('birth_date')->nullable();
-            $table->string('spouse_name')->nullable();
-            $table->string('spouse_contact_number')->nullable();
-            $table->string('philhealth_number')->nullable();
-            $table->string('blood_type')->nullable();
-            $table->string('allergies')->nullable();            
-            $table->timestamps();
-            $table->softDeletes();
-            $table->unsignedBigInteger('users_id')->nullable();
-            //   ->constrained('users')
-            //   ->cascadeOnDelete();
-=======
             $table->string('address', 255)->nullable();
             $table->string('sex', 255)->nullable();
             $table->string('birth_place', 255)->nullable();
@@ -52,7 +33,6 @@ return new class extends Migration
             $table->timestamps(); // creates created_at and updated_at
             $table->softDeletes(); // creates deleted_at
             $table->foreignId('users_id')->constrained('users')->cascadeOnDelete();
->>>>>>> main
         });
     }
 
