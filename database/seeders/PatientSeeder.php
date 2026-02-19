@@ -25,7 +25,6 @@ class PatientSeeder extends Seeder
                 'civil_status'           => 'Single',
                 'religion'               => 'None',
                 'nationality'            => 'Filipino',
-                'contact_number'         => '09123456789',
                 'birth_date'             => '1990-01-01',
                 'spouse_name'            => null,
                 'spouse_contact_number'  => null,
