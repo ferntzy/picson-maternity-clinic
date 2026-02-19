@@ -29,18 +29,22 @@ class Patient extends Model
     ];
 
     /**
-     * The patient’s identity (firstname, lastname, etc.)
+     * The user account of the patient (role: patient)
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->hasOne(User::class, 'patient_id', 'id');
     }
-
     /**
-     * The nurse/admin who created the record
+     * The nurse who created this patient record
      */
     public function creator()
     {
         return $this->belongsTo(User::class, 'users_id');
     }
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class,'patient_id');
+    }
+
 }

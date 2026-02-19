@@ -105,7 +105,6 @@ class PatientForm
 
                     TextInput::make('allergies')
                         ->placeholder('e.g. Penicillin, Seafood')
-                        ->required()
                         ->maxLength(255)
                         ->columnSpan(4),
                 ]),
