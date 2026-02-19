@@ -3,24 +3,32 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
+// Login (your existing v4 style)
 use Filament\Auth\Http\Responses\Contracts\LoginResponse as LoginResponseContract;
 use App\Http\Responses\LoginResponse;
+
+// Logout (this namespace is correct for v4)
+use Filament\Auth\Http\Responses\Contracts\LogoutResponse as LogoutResponseContract;
+use App\Http\Responses\LogoutResponse;
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
+        // Login binding (keep yours)
         $this->app->singleton(
             LoginResponseContract::class,
             LoginResponse::class
         );
+
+        // Logout binding – add this block
+        $this->app->singleton(
+            LogoutResponseContract::class,
+            LogoutResponse::class
+        );
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //
