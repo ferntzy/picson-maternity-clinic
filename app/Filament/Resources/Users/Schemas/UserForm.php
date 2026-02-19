@@ -68,7 +68,6 @@ class UserForm
                         TextInput::make('email')
                             ->label('Email Address')
                             ->email()
-                            ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
 
