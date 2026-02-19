@@ -14,14 +14,15 @@ return new class extends Migration
             $table->dateTime('date_time_admitted')->nullable();
             $table->dateTime('date_time_discharged')->nullable();
             $table->integer('number_of_days_stay')->nullable();
-            $table->string('type_of_admission')->nullable();
-            $table->string('service_classification')->nullable();
+            $table->enum('type_of_admission',['new','old'])->nullable();
+            $table->enum('service_classification',['philhealth','nonphilhealth'])->nullable();
             $table->string('admitting_diagnosis')->nullable();
             $table->string('admitting_icd_code')->nullable();
             $table->string('final_diagnosis')->nullable();
             $table->string('final_icd_code')->nullable();
-            $table->string('result_outcome')->nullable();
+            $table->enum('result_outcome',['delivered','improved','unimproved','died','referred'])->nullable();
             $table->string('referred_by')->nullable();
+            
 
             // Foreign Keys
             $table->foreignId('admissions_id')

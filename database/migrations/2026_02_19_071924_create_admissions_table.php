@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('admissions', function (Blueprint $table) {
             $table->id();
+
             $table->string('rpr')->nullable();
             $table->string('hiv')->nullable();
             $table->decimal('hemoglobin', 10, 2)->nullable();
