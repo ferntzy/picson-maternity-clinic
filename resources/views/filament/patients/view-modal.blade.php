@@ -7,11 +7,16 @@
         <div class="patient-card__avatar">
             {{ substr($record->user?->firstname ?? 'P', 0, 1) }}
         </div>
-        <div>
+        <div class="patient-card__header-info">
             <h2 class="patient-card__name">
                 {{ trim(($record->user?->firstname ?? '') . ' ' . ($record->user?->middlename ?? '') . ' ' . ($record->user?->lastname ?? '')) }}
             </h2>
             <span class="patient-card__badge">Patient</span>
+        </div>
+        <div class="patient-card__header-actions">
+            <a href="/admin/admissions" class="patient-card__admission-btn">
+                + Add Patient Admission
+            </a>
         </div>
     </div>
 
