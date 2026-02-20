@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('civil_status', 255)->nullable();
             $table->string('religion', 255)->nullable();
             $table->string('nationality', 255)->nullable();
-            $table->string('birth_date', 255)->nullable();
+            $table->date('birth_date')->nullable();
             $table->string('emergency_contact_name', 255)->nullable();
             $table->string('emergency_contact_number', 255)->nullable();
             $table->string('philhealth_number', 255)->nullable();
