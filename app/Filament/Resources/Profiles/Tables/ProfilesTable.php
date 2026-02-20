@@ -43,9 +43,9 @@ class ProfilesTable
                 TextColumn::make('contact_num')
                     ->label('Contact Number'),
             ])
-            ->filters([
-                TrashedFilter::make(),
-            ])   
+            // ->filters([
+            //     TrashedFilter::make(),
+            // ])   
             ->recordActions([
                 ActionGroup::make([
                     EditAction::make()
@@ -93,6 +93,20 @@ class ProfilesTable
                         ->modalWidth('4xl')
                         ->modalSubmitAction(false)
                         ->modalCancelActionLabel('Close')
+                        ->modalCancelAction(fn ($action) => $action
+                            ->extraAttributes([
+                                'style' => '
+                                    border: 1px solid #d1d5db;
+                                    font-weight: 600;
+                                    color: #374151;
+                                    border-radius: 8px;
+                                    padding: 0.8rem 1.2rem;
+                                    font-weight: 600;
+                                    font-size: 0.875rem;
+                                    cursor: pointer;
+                                '
+                            ])
+                        )
                         ->schema(fn ($infolist) => ProfileInfolist::configure($infolist)),
                 ])
                 ->icon('heroicon-m-ellipsis-vertical')  // the 3-dot icon
