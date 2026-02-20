@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('deliver_at');
             $table->boolean('phi_accredited')->default(true);
             $table->boolean('phi_member')->default(true);
-            $table->int('estimated_cost');
+            $table->integer('estimated_cost');
             $table->string('payment_mode');
             $table->string('available_transport_to_facility');
             $table->string('communicated_with');

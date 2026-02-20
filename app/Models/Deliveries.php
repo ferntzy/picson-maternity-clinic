@@ -3,28 +3,30 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Deliveries extends Model
 {
-    use SoftDeletes;
-
-    protected $table = 'deliveries';
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'profile_id',
         'time_of_delivery',
         'type_of_delivery',
-        'patient_id'
     ];
 
-    public function patient()
+    protected $casts = [
+        'time_of_delivery' => 'datetime',
+    ];
+
+    public function profile()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(Profiles::class, 'profile_id');
     }
 
-    public function newbornRecords()
+    public function newborns()
     {
-        return $this->hasMany(Newborns::class, 'deliveries_id');
+        return $this->hasMany(Newborns::class, 'delivery_id');
     }
-
 }
