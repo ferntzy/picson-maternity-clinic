@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('laboratory_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
-            $table->string('bedroom_nubmer');
+            $table->string('bedroom_number');
             $table->dateTime('date_and_time');
             $table->string('case_record_number');
             $table->text('notes');

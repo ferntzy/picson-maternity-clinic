@@ -44,6 +44,6 @@ class Admission extends Model
     // Relationship: Admission belongs to Patient
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(Profiles::class);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('newborn_record_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('newborn_id')->nullable()->constrained('newborns')->nullOnDelete();
-            $table->string('assesment_type');
+            $table->string('assessment_type');
             $table->string('item');
             $table->string('value');
             $table->timestamps();
