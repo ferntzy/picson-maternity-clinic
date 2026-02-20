@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Patient;
-use App\Models\User;
+use App\Models\Profiles;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class PatientSeeder extends Seeder
 {
@@ -15,37 +13,23 @@ class PatientSeeder extends Seeder
      */
     public function run(): void
     {
-        // First, create the patient record
-        $patient = Patient::firstOrCreate(
-            [
-                'address'                => '123 Main St, Cityville',
-                'sex'                    => 'Male',
-                'birth_place'            => 'Cityville',
-                'civil_status'           => 'Single',
-                'religion'               => 'None',
-                'nationality'            => 'Filipino',
-                'birth_date'             => '1990-01-01',
-                'spouse_name'            => 'Vejee Laniog',
-                'spouse_contact_number'  => '09887656744',
-                'philhealth_number'      => 'PH123456789',
-                'blood_type'             => 'O+',
-                'allergies'              => 'None',
-                'users_id'               => 1, // assuming admin user ID 1 created this patient
-            ]
-        );
-
-        // Then, create a user account for the patient
-        User::firstOrCreate(
-            ['email' => 'johndamn@example.com'],
-            [
-                'firstname'   => 'John',
-                'middlename'  => 'B',
-                'lastname'    => 'Doe',
-                'password'    => Hash::make('password123'),
-                'role'        => 'patient',
-                'patient_id'  => $patient->id, // link to patient record
-                'contact_num' => '09123456789'
-            ]
-        );
+        Profiles::create([
+            'firstname' => 'Rovic',
+            'middlename' => 'Love',
+            'lastname' => 'Harley',
+            'address' => 'Inopacan, Leyte',
+            'sex' => 'Female',
+            'birth_place' => 'Maasin City, Southern Leyte',
+            'civil_status' => 'single',
+            'religion' => 'Muslim',
+            'nationality' => 'Australian',
+            'birth_date' => '1998-02-20',
+            'emergency_contact_name' => 'Rafael T. Virgin',
+            'emergency_contact_number' => '09287645377',
+            'philhealth_number' => '01983265123',
+            'blood_type' => 'A+',
+            'allergies' => 'None',
+            'contact_num' => '092837467577',
+        ]);
     }
 }
