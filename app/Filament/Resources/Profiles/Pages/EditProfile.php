@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Filament\Resources\Patients\Pages;
+namespace App\Filament\Resources\Profiles\Pages;
 
-use App\Filament\Resources\Patients\PatientResource;
+use App\Filament\Resources\Profiles\ProfileResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
-use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditPatient extends EditRecord
+class EditProfile extends EditRecord
 {
-    protected static string $resource = PatientResource::class;
+    protected static string $resource = ProfileResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),

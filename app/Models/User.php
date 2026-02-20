@@ -6,118 +6,103 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
     use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
-        'id',
         'email',
         'password',
-        'firstname',
-        'middlename',
-        'lastname',
-        'patient_id',
-        'username',
-        'contact_num',
         'avatar',
         'role',
-
+        'profile_id',     // foreign key to profiles / patients table
+        // Add any other real columns you have (e.g. 'email_verified_at' if used)
     ];
 
     protected $hidden = [
         'password',
-        // 'remember_token',
+        'remember_token',   // ← usually good to hide this too
+    ];
+
+    protected $casts = [
+        'password' => 'hashed',
+        // 'email_verified_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
-     * The patient record this user account belongs to
+     * The patient/profile record this user account is linked to.
      */
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_id');
+        return $this->belongsTo(Profiles::class, 'profile_id');
+        // If your model is named Profiles.php → change to Profiles::class
     }
-  
+
+    /**
+     * Inverse: if needed (rare for this setup)
+     */
+    // public function profile() { ... } // alias if you prefer
+
+    /**
+     * For Filament: custom display name in top bar, breadcrumbs, etc.
+     */
     public function getFilamentName(): string
     {
-        $first = trim($this->firstname ?? '');
-        $last  = trim($this->lastname ?? '');
-        $middleRaw = trim($this->middlename ?? '');
+        $parts = array_filter([
+            trim($this->patient?->firstname ?? ''),
+            trim($this->patient?->middlename ?? ''),
+            trim($this->patient?->lastname ?? ''),
+        ]);
 
-        if (empty($first) && empty($last)) {
+        if (empty($parts)) {
             return $this->email ?: ('User #' . $this->id);
         }
 
-        $middleInitials = '';
-        if ($middleRaw !== '') {
-            // Split on spaces (handles multiple middle names)
-            $middleParts = preg_split('/\s+/', $middleRaw, -1, PREG_SPLIT_NO_EMPTY);
-            $initials = array_map(fn($part) => strtoupper(substr($part, 0, 1)) . '.', $middleParts);
-            $middleInitials = ' ' . implode(' ', $initials);
-        }
-
-        return trim("{$first}{$middleInitials} {$last}");
+        return implode(' ', $parts);
     }
 
-    protected function fullName(): Attribute
+    /**
+     * Optional: simple accessor if you want $user->full_name elsewhere
+     */
+    public function getFullNameAttribute(): string
     {
-        return Attribute::make(
-            get: function (): string {
-                $first = trim($this->firstname ?? '');
-                $last  = trim($this->lastname ?? '');
-                $middleRaw = trim($this->middlename ?? '');
-
-                if (empty($first) && empty($last)) {
-                    return $this->email ?: ('User #' . $this->id);
-                }
-
-                $middleInitials = '';
-                if ($middleRaw !== '') {
-                    $middleParts = preg_split('/\s+/', $middleRaw, -1, PREG_SPLIT_NO_EMPTY);
-                    $initials = array_map(fn($part) => strtoupper(substr($part, 0, 1)) . '.', $middleParts);
-                    $middleInitials = ' ' . implode(' ', $initials);
-                }
-
-                return trim("{$first}{$middleInitials} {$last}");
-            }
-        );
+        return $this->getFilamentName(); // reuse logic
     }
 
+    /**
+     * Control access to different Filament panels based on role
+     */
     public function canAccessPanel(Panel $panel): bool
     {
         $role = strtolower(trim($this->role ?? ''));
 
+        // Always allow access to the default/auth/login panel
+        if ($panel->getId() === 'auth') {
+            return true;
+        }
+
         return match ($panel->getId()) {
-            'auth'     => true, // allow login panel always
             'director' => $role === 'director',
             'admin'    => $role === 'admin',
             'doctor'   => $role === 'doctor',
             'nurse'    => $role === 'nurse',
-            'patient'   => $role === 'patient',
+            'patient'  => $role === 'patient',
             default    => false,
         };
     }
 
-    protected function casts(): array
-    {
-        return [
-            // 'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-    // If this user is a nurse/admin and created patients
+    /**
+     * If users (e.g. staff) can create patients and you have users_id column on profiles/patients
+     */
     public function createdPatients()
     {
-        return $this->hasMany(Patient::class, 'users_id');
-    }
-
-    public function getFullNameAttribute(): string
-    {
-        return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
+        return $this->hasMany(Profiles::class, 'users_id');
+        // Remove this method if you don't have users_id column
     }
 }
