@@ -14,7 +14,7 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns([  
                 ImageColumn::make('avatar')
                     ->label('Profile Picture')
                     ->disk('public')

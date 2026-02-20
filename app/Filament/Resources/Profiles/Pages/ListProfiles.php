@@ -10,10 +10,13 @@ class ListProfiles extends ListRecords
 {
     protected static string $resource = ProfileResource::class;
 
-    protected function getHeaderActions(): array
+    public function getTitle(): string
     {
-        return [
-            CreateAction::make(),
-        ];
+        return '';
+    }
+
+    protected function hasHeader(): bool
+    {
+        return false;
     }
 }

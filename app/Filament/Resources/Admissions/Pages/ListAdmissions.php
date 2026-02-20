@@ -12,7 +12,7 @@ class ListAdmissions extends ListRecords
 
 
 
-     public function getTitle(): string
+    public function getTitle(): string
     {
         return '';
     }

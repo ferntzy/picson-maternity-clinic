@@ -22,7 +22,7 @@ class ProfileResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static ?string $recordTitleAttribute = 'Profiles';
+    protected static ?string $recordTitleAttribute = 'Patient Profiles';
 
     public static function form(Schema $schema): Schema
     {
@@ -45,8 +45,8 @@ class ProfileResource extends Resource
     {
         return [
             'index' => ListProfiles::route('/'),
-            'create' => CreateProfile::route('/create'),
-            'edit' => EditProfile::route('/{record}/edit'),
+            // 'create' => CreateProfile::route('/create'),
+            // 'edit' => EditProfile::route('/{record}/edit'),
         ];
     }
 
