@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Profiles;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        Profiles::create([
+        User::create([
             'email' => 'admin@example.com',
             'password' => bcrypt('123456'),
             'role' => 'admin',
