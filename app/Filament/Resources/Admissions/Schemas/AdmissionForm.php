@@ -16,7 +16,7 @@ class AdmissionForm
     {
         return $schema
             ->components([
-                // Patient Selection (Always visible)
+                // Patient Selection (Always visible)  
                 Grid::make(12)->components([
                 Select::make('patient_id')
                 ->label('Patient')

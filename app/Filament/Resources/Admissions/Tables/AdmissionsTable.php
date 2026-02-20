@@ -111,7 +111,7 @@ class AdmissionsTable
                         'admission_consent' => 'Admission Consent',
                         'admission_discharge' => 'Admission and Discharge',
                     ]),
-                TrashedFilter::make(),
+                TrashedFilter::make(),  
             ])
             ->recordActions([
                 ViewAction::make(),
