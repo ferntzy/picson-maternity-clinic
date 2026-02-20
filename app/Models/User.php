@@ -19,70 +19,80 @@ class User extends Authenticatable implements FilamentUser, HasName
         'password',
         'avatar',
         'role',
-        'profile_id',     // foreign key to profiles / patients table
-        // Add any other real columns you have (e.g. 'email_verified_at' if used)
+        'profile_id',     // foreign key → profiles.id
     ];
 
     protected $hidden = [
         'password',
-        'remember_token',   // ← usually good to hide this too
+        'remember_token',
     ];
 
     protected $casts = [
         'password' => 'hashed',
-        // 'email_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
     /**
-     * The patient/profile record this user account is linked to.
+     * The profile this user account is linked to.
+     */
+    public function profile()
+    {
+        return $this->belongsTo(Profiles::class, 'profile_id');
+    }
+
+    /**
+     * Optional alias if some code still expects ->patient()
      */
     public function patient()
     {
-        return $this->belongsTo(Profiles::class, 'profile_id');
-        // If your model is named Profiles.php → change to Profiles::class
+        return $this->profile();
     }
 
     /**
-     * Inverse: if needed (rare for this setup)
-     */
-    // public function profile() { ... } // alias if you prefer
-
-    /**
-     * For Filament: custom display name in top bar, breadcrumbs, etc.
+     * Filament display name (top bar, etc.) – pulls from linked profile
      */
     public function getFilamentName(): string
     {
-        $parts = array_filter([
-            trim($this->patient?->firstname ?? ''),
-            trim($this->patient?->middlename ?? ''),
-            trim($this->patient?->lastname ?? ''),
-        ]);
-
-        if (empty($parts)) {
-            return $this->email ?: ('User #' . $this->id);
+        if ($this->profile) {
+            return $this->profile->fullname;  // uses getFullnameAttribute() on Profile
         }
 
-        return implode(' ', $parts);
+        return $this->email ?: ('User #' . $this->id);
     }
 
     /**
-     * Optional: simple accessor if you want $user->full_name elsewhere
+     * Optional simple accessor for $user->full_name
      */
-    public function getFullNameAttribute(): string
-    {
-        return $this->getFilamentName(); // reuse logic
+    public function getFullnameAttribute(): string
+{
+    $first = trim($this->firstname ?? '');
+    $last  = trim($this->lastname ?? '');
+
+    if (empty($first) && empty($last)) {
+        return 'Unnamed';
     }
 
+    $middleInitial = '';
+    $middlename = trim($this->middlename ?? '');
+
+    if ($middlename !== '') {
+        // Take the first letter of the first word in middlename
+        $firstWord = explode(' ', $middlename)[0];
+        $middleInitial = ' ' . strtoupper(substr($firstWord, 0, 1)) . '.';
+    }
+
+    return trim("{$first}{$middleInitial} {$last}");
+}
+
     /**
-     * Control access to different Filament panels based on role
+     * Panel access based on role
      */
     public function canAccessPanel(Panel $panel): bool
     {
         $role = strtolower(trim($this->role ?? ''));
 
-        // Always allow access to the default/auth/login panel
+        // Always allow auth/login panel
         if ($panel->getId() === 'auth') {
             return true;
         }
@@ -98,11 +108,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * If users (e.g. staff) can create patients and you have users_id column on profiles/patients
+     * If staff users create profiles/patients and you have 'created_by' or 'users_id' on profiles
      */
-    public function createdPatients()
+    public function createdProfiles()
     {
-        return $this->hasMany(Profiles::class, 'users_id');
-        // Remove this method if you don't have users_id column
+        return $this->hasMany(Profiles::class, 'created_by');
+        // Adjust foreign key if it's 'users_id' instead
     }
 }
