@@ -6,15 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('two_way_referral_forms', function (Blueprint $table) {
             $table->id();
             $table->text('reason_for_referral');
-            $table->string('reffered_to');
+            $table->string('reffered_to'); // keeping your spelling
             $table->boolean('patient_category');
             $table->string('health_insurance');
             $table->boolean('charity');
@@ -25,9 +22,9 @@ return new class extends Migration
             $table->integer('diastolic_bp');
             $table->integer('pulse_rate');
             $table->integer('respiratory_rate');
-            $table->decimal('temperature');
-            $table->decimal('weight');
-            $table->string('reffered_by');
+            $table->decimal('temperature', 5, 2);
+            $table->decimal('weight', 8, 2);
+            $table->string('reffered_by'); // keeping your spelling
             $table->string('designation');
             $table->string('contact_number');
             $table->timestamps();
@@ -35,9 +32,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('two_way_referral_forms');

@@ -12,7 +12,7 @@ class NewbornRecordData extends Model
 
     protected $fillable = [
         'newborn_id',
-        'assesment_type', // keep spelling as in migration
+        'assessment_type', 
         'item',
         'value',
     ];
