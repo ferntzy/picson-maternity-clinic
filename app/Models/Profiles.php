@@ -48,12 +48,22 @@ class Profiles extends Model
 
     public function getFullnameAttribute(): string
     {
-        $parts = array_filter([
-            trim($this->firstname ?? ''),
-            trim($this->middlename ?? ''),
-            trim($this->lastname ?? ''),
-        ]);
+        $first = trim($this->firstname ?? '');
+        $last  = trim($this->lastname ?? '');
 
-        return implode(' ', $parts) ?: 'Unnamed Person';
+        if (empty($first) && empty($last)) {
+            return 'Unnamed';
+        }
+
+        $middleInitial = '';
+        $middlename = trim($this->middlename ?? '');
+
+        if ($middlename !== '') {
+            // Use only the first letter of the first middle name word
+            $firstMiddleWord = explode(' ', $middlename)[0] ?? '';
+            $middleInitial = ' ' . strtoupper(substr($firstMiddleWord, 0, 1)) . '.';
+        }
+
+        return trim("{$first}{$middleInitial} {$last}");
     }
 }

@@ -19,7 +19,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'password',
         'avatar',
         'role',
-        'profile_id',     // foreign key → profiles.id
+        'profile_id',
     ];
 
     protected $hidden = [
@@ -33,66 +33,44 @@ class User extends Authenticatable implements FilamentUser, HasName
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * The profile this user account is linked to.
-     */
     public function profile()
     {
         return $this->belongsTo(Profiles::class, 'profile_id');
+        // ↑ IMPORTANT: use Profile::class (singular), not Profiles::class
     }
 
-    /**
-     * Optional alias if some code still expects ->patient()
-     */
+    // Optional alias (if old code still uses ->patient())
     public function patient()
     {
         return $this->profile();
     }
 
     /**
-     * Filament display name (top bar, etc.) – pulls from linked profile
+     * This is what Filament uses for display name (avatar dropdown, breadcrumbs, etc.)
      */
     public function getFilamentName(): string
     {
-        if ($this->profile) {
-            return $this->profile->fullname;  // uses getFullnameAttribute() on Profile
+        // Delegate to the profile's fullname accessor
+        if ($this->profile && $this->profile->fullname) {
+            return $this->profile->fullname;
         }
 
+        // Fallbacks
         return $this->email ?: ('User #' . $this->id);
     }
 
     /**
-     * Optional simple accessor for $user->full_name
+     * Optional: also provide a full_name accessor on User that does the same
      */
-    public function getFullnameAttribute(): string
-{
-    $first = trim($this->firstname ?? '');
-    $last  = trim($this->lastname ?? '');
-
-    if (empty($first) && empty($last)) {
-        return 'Unnamed';
+    public function getFullNameAttribute(): string
+    {
+        return $this->getFilamentName();
     }
 
-    $middleInitial = '';
-    $middlename = trim($this->middlename ?? '');
-
-    if ($middlename !== '') {
-        // Take the first letter of the first word in middlename
-        $firstWord = explode(' ', $middlename)[0];
-        $middleInitial = ' ' . strtoupper(substr($firstWord, 0, 1)) . '.';
-    }
-
-    return trim("{$first}{$middleInitial} {$last}");
-}
-
-    /**
-     * Panel access based on role
-     */
     public function canAccessPanel(Panel $panel): bool
     {
         $role = strtolower(trim($this->role ?? ''));
 
-        // Always allow auth/login panel
         if ($panel->getId() === 'auth') {
             return true;
         }
@@ -107,12 +85,9 @@ class User extends Authenticatable implements FilamentUser, HasName
         };
     }
 
-    /**
-     * If staff users create profiles/patients and you have 'created_by' or 'users_id' on profiles
-     */
     public function createdProfiles()
     {
         return $this->hasMany(Profiles::class, 'created_by');
-        // Adjust foreign key if it's 'users_id' instead
+        // or 'users_id' — change the foreign key if needed
     }
 }

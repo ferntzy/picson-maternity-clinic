@@ -26,21 +26,24 @@ class UserForm
                         // Name fields in a grid
                         ComponentsSection::make()
                             ->schema([
-                                TextInput::make('firstname')
+                                TextInput::make('profiles.first_name')
                                     ->label('First Name')
+                                    ->placeholder('Enter first name')
                                     ->required()
                                     ->maxLength(100),
 
-                                TextInput::make('middlename')
+                                TextInput::make('profiles.middle_name')
                                     ->label('Middle Name')
+                                    ->placeholder('Enter middle name (optional)')
                                     ->maxLength(100),
 
-                                TextInput::make('lastname')
+                                TextInput::make('profiles.last_name')
                                     ->label('Last Name')
+                                    ->placeholder('Enter last name')
                                     ->required()
                                     ->maxLength(100),
                             ])
-                            ->columns(3),
+                            ->columns(1),
                         FileUpload::make('avatar')
                             ->label('Profile Picture')
                             ->image()
