@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Profiles;
 
-use App\Filament\Resources\Profiles\Pages\CreateProfile;
-use App\Filament\Resources\Profiles\Pages\EditProfile;
 use App\Filament\Resources\Profiles\Pages\ListProfiles;
 use App\Filament\Resources\Profiles\Schemas\ProfileForm;
 use App\Filament\Resources\Profiles\Tables\ProfilesTable;
@@ -23,6 +21,16 @@ class ProfileResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
     protected static ?string $recordTitleAttribute = 'Patient Profiles';
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Patient Profiles';
+    }
+
+    public static function getBreadcrumb(): string
+    {
+        return 'Patient Profiles';
+    }
 
     public static function form(Schema $schema): Schema
     {
