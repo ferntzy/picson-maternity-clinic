@@ -28,10 +28,7 @@ class UsersTable
                     ->sortable(['firstname', 'lastname'])
                     ->formatStateUsing(fn($state) => $state ?: '—'),
                 TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('username')
-                    ->label('User name')
+                    ->label('Email ')
                     ->searchable(),
                 TextColumn::make('role')
                     ->searchable(),
