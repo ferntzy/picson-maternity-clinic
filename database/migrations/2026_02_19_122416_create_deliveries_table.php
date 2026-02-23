@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->dateTime('time_of_delivery')->nullable();
-            $table->string('type_of_delivery')->nullable();
+            $table->enum('type_of_delivery', ['vaginal', 'cesarean'])->nullable();
             $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();

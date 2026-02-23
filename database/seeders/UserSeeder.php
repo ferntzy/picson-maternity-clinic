@@ -18,7 +18,6 @@ class UserSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => bcrypt('123456'),
             'role' => 'admin',
-            'profile_id' => 1, // Assuming this user is linked to the first profile created by PatientSeeder
         ]);
     }
 }
