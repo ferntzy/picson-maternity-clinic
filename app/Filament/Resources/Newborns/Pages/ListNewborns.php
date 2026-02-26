@@ -16,11 +16,8 @@ class ListNewborns extends ListRecords
         return '';
     }
 
-
-    protected function getHeaderActions(): array
+    protected function hasHeader(): bool
     {
-        return [
-            CreateAction::make(),
-        ];
+        return false;
     }
 }
