@@ -24,7 +24,7 @@ return new class extends Migration
             $table->decimal('chest');
             $table->decimal('abdomen');
             $table->decimal('length');
-            $table->string('newborn_screening_done');
+            $table->date('newborn_screening_done');
             $table->timestamps();
             $table->softDeletes();
         });
