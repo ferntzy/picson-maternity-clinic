@@ -29,7 +29,7 @@ class Profiles extends Model
         'blood_type',
         'allergies',
         'contact_num',
-        // 'users_id',   // ← only add if this column actually exists (creator reference)
+        'role',
     ];
 
     protected $casts = [
