@@ -17,7 +17,7 @@ class LoginResponse implements BaseLoginResponse
             return redirect()->to(Filament::getPanel('auth')->getUrl());
         }
 
-        $role = strtolower(trim($user->role ?? ''));
+        $role = strtolower(trim($user->getRole() ?? ''));
 
         return match ($role) {
             'admin'             => redirect()->to(Filament::getPanel('admin')->getUrl()),

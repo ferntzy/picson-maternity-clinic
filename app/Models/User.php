@@ -18,7 +18,6 @@ class User extends Authenticatable implements FilamentUser, HasName
         'email',
         'password',
         'avatar',
-        'role',
         'profile_id',
     ];
 
@@ -67,9 +66,17 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->getFilamentName();
     }
 
+    /**
+     * Get the user's role from their profile
+     */
+    public function getRole(): ?string
+    {
+        return $this->profile?->role;
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
-        $role = strtolower(trim($this->role ?? ''));
+        $role = strtolower(trim($this->getRole() ?? ''));
 
         if ($panel->getId() === 'auth') {
             return true;
