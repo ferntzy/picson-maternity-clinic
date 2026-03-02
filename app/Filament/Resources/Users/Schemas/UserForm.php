@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Schema;
-use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\FileUpload;
-
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section as ComponentsSection;
+use Filament\Support\Icons\Heroicon;
+use App\Models\Profiles;
 
 class UserForm
 {
@@ -19,31 +19,179 @@ class UserForm
     {
         return $schema
             ->components([
+                // Profile section for CREATE mode
+                ComponentsSection::make('Profile Selection')
+                    ->icon(Heroicon::OutlinedUser)
+                    ->collapsible()
+                    ->visible(fn($record) => $record === null) // Only show on create
+                    ->schema([
+                        Select::make('profile_id')
+                            ->label('Select Profile')
+                            ->placeholder('Choose an existing profile')
+                            ->options(function () {
+                                return Profiles::whereDoesntHave('user')
+                                    ->get()
+                                    ->mapWithKeys(fn($profile) => [$profile->id => $profile->fullname])
+                                    ->toArray();
+                            })
+                            ->required()
+                            ->columnSpanFull()
+                            ->helperText('Profiles must be created first and have Google SSO configured'),
+                    ]),
+
+                // Personal Information section
                 ComponentsSection::make('Personal Information')
                     ->icon(Heroicon::OutlinedUser)
                     ->collapsible()
+                    ->visible(fn($record) => $record !== null) // Only show on edit
+                    ->columns(2)
                     ->schema([
-                        // Name fields in a grid
-                        ComponentsSection::make()
-                            ->schema([
-                                TextInput::make('profiles.first_name')
-                                    ->label('First Name')
-                                    ->placeholder('Enter first name')
-                                    ->required()
-                                    ->maxLength(100),
+                        TextInput::make('profile.firstname')
+                            ->label('First Name')
+                            ->required()
+                            ->maxLength(255),
 
-                                TextInput::make('profiles.middle_name')
-                                    ->label('Middle Name')
-                                    ->placeholder('Enter middle name (optional)')
-                                    ->maxLength(100),
+                        TextInput::make('profile.middlename')
+                            ->label('Middle Name')
+                            ->maxLength(255),
 
-                                TextInput::make('profiles.last_name')
-                                    ->label('Last Name')
-                                    ->placeholder('Enter last name')
-                                    ->required()
-                                    ->maxLength(100),
+                        TextInput::make('profile.lastname')
+                            ->label('Last Name')
+                            ->required()
+                            ->maxLength(255),
+
+                        DatePicker::make('profile.birth_date')
+                            ->label('Birth Date')
+                            ->native(false),
+
+                        Select::make('profile.sex')
+                            ->label('Sex')
+                            ->options([
+                                'M' => 'Male',
+                                'F' => 'Female',
+                                'O' => 'Other',
+                            ]),
+
+                        TextInput::make('profile.birth_place')
+                            ->label('Birth Place')
+                            ->maxLength(255),
+
+                        Select::make('profile.civil_status')
+                            ->label('Civil Status')
+                            ->options([
+                                'Single' => 'Single',
+                                'Married' => 'Married',
+                                'Divorced' => 'Divorced',
+                                'Widowed' => 'Widowed',
+                                'Separated' => 'Separated',
+                            ]),
+
+                        TextInput::make('profile.nationality')
+                            ->label('Nationality')
+                            ->maxLength(255),
+
+                        TextInput::make('profile.religion')
+                            ->label('Religion')
+                            ->maxLength(255),
+                    ]),
+
+                // Contact Information section
+                ComponentsSection::make('Contact Information')
+                    ->icon('heroicon-o-phone')
+                    ->collapsible()
+                    ->visible(fn($record) => $record !== null) // Only show on edit
+                    ->columns(2)
+                    ->schema([
+                        Textarea::make('profile.address')
+                            ->label('Address')
+                            ->maxLength(255)
+                            ->rows(3)
+                            ->columnSpanFull(),
+
+                        TextInput::make('profile.contact_num')
+                            ->label('Contact Number')
+                            ->tel()
+                            ->maxLength(255),
+
+                        TextInput::make('profile.emergency_contact_name')
+                            ->label('Emergency Contact Name')
+                            ->maxLength(255),
+
+                        TextInput::make('profile.emergency_contact_number')
+                            ->label('Emergency Contact Number')
+                            ->tel()
+                            ->maxLength(255),
+                    ]),
+
+                // Medical Information section
+                ComponentsSection::make('Medical Information')
+                    ->icon('heroicon-o-heart')
+                    ->collapsible()
+                    ->visible(fn($record) => $record !== null) // Only show on edit
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('profile.philhealth_number')
+                            ->label('PhilHealth Number')
+                            ->maxLength(255),
+
+                        Select::make('profile.blood_type')
+                            ->label('Blood Type')
+                            ->options([
+                                'A+' => 'A+',
+                                'A-' => 'A-',
+                                'B+' => 'B+',
+                                'B-' => 'B-',
+                                'AB+' => 'AB+',
+                                'AB-' => 'AB-',
+                                'O+' => 'O+',
+                                'O-' => 'O-',
+                            ]),
+
+                        Textarea::make('profile.allergies')
+                            ->label('Allergies')
+                            ->maxLength(255)
+                            ->rows(3)
+                            ->columnSpanFull(),
+                    ]),
+
+                // Role section
+                ComponentsSection::make('Role & Permissions')
+                    ->icon('heroicon-o-key')
+                    ->collapsible()
+                    ->visible(fn($record) => $record !== null) // Only show on edit
+                    ->schema([
+                        Select::make('profile.role')
+                            ->label('Role')
+                            ->options([
+                                'admin' => 'Admin',
+                                'director' => 'Director',
+                                'doctor' => 'Doctor',
+                                'nurse' => 'Nurse',
+                                'patient' => 'Patient',
                             ])
-                            ->columns(1),
+                            ->required(),
+                    ]),
+
+                // Account Information section
+                ComponentsSection::make('Account Information')
+                    ->icon('heroicon-o-envelope')
+                    ->collapsible()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('email')
+                            ->label('Email Address')
+                            ->email()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->required(),
+
+                        TextInput::make('password')
+                            ->password()
+                            ->label('Password')
+                            ->required(fn($record) => $record === null) // Required only on create
+                            ->dehydrated(fn($state): bool => filled($state))
+                            ->minLength(8),
+
                         FileUpload::make('avatar')
                             ->label('Profile Picture')
                             ->image()
@@ -56,44 +204,11 @@ class UserForm
                             ->imagePreviewHeight('220')
                             ->nullable()
                             ->columnSpanFull()
-
                             ->dehydrateStateUsing(
                                 fn($state) => $state instanceof \Illuminate\Http\UploadedFile
                                     ? $state->store('avatars', 'public')
                                     : $state
                             ),
-                    ]),
-
-                ComponentsSection::make('Account Information')
-                    ->icon('heroicon-o-key')
-                    ->collapsible()
-                    ->schema([
-                        TextInput::make('email')
-                            ->label('Email Address')
-                            ->email()
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true),
-
-                        TextInput::make('username')
-                            ->label('Username')
-                            ->required()
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true)
-                            ->alphaDash()           // only letters, numbers, dashes, underscores
-                            ->minLength(4),
-
-                        TextInput::make('role')
-                            ->label('Role')
-                            ->required()
-                            ->maxLength(45),
-
-                        TextInput::make('password')
-                            ->password()
-                            ->label('Password')
-                            ->required(fn(string $context): bool => $context === 'create')
-                            ->dehydrated(fn($state): bool => filled($state))
-                            ->minLength(8)
-                            ->columnSpanFull(),
                     ]),
             ]);
     }
