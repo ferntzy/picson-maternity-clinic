@@ -29,6 +29,7 @@ return new class extends Migration
             $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->nullable();
             $table->string('allergies', 255)->nullable();
             $table->string('contact_num', 255)->nullable();
+            $table->string('role', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

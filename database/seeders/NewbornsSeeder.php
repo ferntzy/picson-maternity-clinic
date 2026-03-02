@@ -18,7 +18,7 @@ class NewbornsSeeder extends Seeder
     {
         $delivery = Deliveries::create([
             'time_of_delivery' => '14:45:20',
-            'type_of_delivery' => 'Normal',
+            'type_of_delivery' => 'vaginal',
             'profile_id' => 1
         ]);
 
