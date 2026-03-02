@@ -158,24 +158,6 @@ class UserForm
                 ComponentsSection::make('Role & Permissions')
                     ->icon('heroicon-o-key')
                     ->collapsible()
-                    ->visible(fn($record) => $record === null) // Only show on create
-                    ->schema([
-                        Select::make('profile.role')
-                            ->label('Role')
-                            ->options([
-                                'admin' => 'Admin',
-                                'director' => 'Director',
-                                'doctor' => 'Doctor',
-                                'nurse' => 'Nurse',
-                                'patient' => 'Patient',
-                            ])
-                            ->required(),
-                    ]),
-
-                // Role section (edit mode)
-                ComponentsSection::make('Role & Permissions')
-                    ->icon('heroicon-o-key')
-                    ->collapsible()
                     ->visible(fn($record) => $record !== null) // Only show on edit
                     ->schema([
                         Select::make('profile.role')
@@ -194,32 +176,21 @@ class UserForm
                 ComponentsSection::make('Account Information')
                     ->icon('heroicon-o-envelope')
                     ->collapsible()
-                    ->columns(1)
+                    ->columns(2)
                     ->schema([
                         TextInput::make('email')
                             ->label('Email Address')
                             ->email()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
-                            ->required()
-                            ->helperText('This will be verified via Google SSO'),
+                            ->required(),
 
                         TextInput::make('password')
                             ->password()
                             ->label('Password')
                             ->required(fn($record) => $record === null) // Required only on create
                             ->dehydrated(fn($state): bool => filled($state))
-                            ->minLength(8)
-                            ->revealable(),
-
-                        TextInput::make('password_confirmation')
-                            ->password()
-                            ->label('Confirm Password')
-                            ->required(fn($record) => $record === null) // Required only on create
-                            ->same('password')
-                            ->dehydrated(false)
-                            ->minLength(8)
-                            ->revealable(),
+                            ->minLength(8),
 
                         FileUpload::make('avatar')
                             ->label('Profile Picture')
