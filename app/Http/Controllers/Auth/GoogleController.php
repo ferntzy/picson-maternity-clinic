@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class GoogleController extends Controller
 {
@@ -17,20 +16,25 @@ class GoogleController extends Controller
 
     public function callback()
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+            $email = $googleUser->getEmail();
 
-        $user = User::where('email', $googleUser->getEmail())->first();
+            // Only authenticate if user already exists (created by admin beforehand)
+            $user = User::where('email', $email)->first();
 
-        if (!$user) {
-            $user = User::create([
-                'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
-                'password' => bcrypt(Str::random(16)),
-            ]);
+            if (!$user) {
+                // User does not exist - they need to be created by an admin first
+                return redirect('/admin/login')
+                    ->with('error', 'Your account does not exist. Please contact your administrator to create your account.');
+            }
+
+            Auth::login($user);
+
+            return redirect('/dashboard');
+        } catch (\Exception $e) {
+            return redirect('/admin/login')
+                ->with('error', 'Authentication failed. Please try again.');
         }
-
-        Auth::login($user);
-
-        return redirect('/dashboard');
     }
 }
