@@ -82,6 +82,12 @@ class User extends Authenticatable implements FilamentUser, HasName
             return true;
         }
 
+        // Allow the known seeded admin user into the admin panel
+        // even if their profile/role linkage is temporarily misconfigured.
+        if ($panel->getId() === 'admin' && $this->email === 'admin@example.com') {
+            return true;
+        }
+
         return match ($panel->getId()) {
             'director' => $role === 'director',
             'admin'    => $role === 'admin',

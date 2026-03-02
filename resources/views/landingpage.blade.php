@@ -22,9 +22,14 @@
                     <a href="#appointment">Appointment</a>
                     <a href="#contact">Contact</a>
                 </nav>
-                <a href="{{ url('/login') }}">
+                <a href="{{ \Filament\Facades\Filament::getPanel('auth')->getLoginUrl() }}">
                     <button class="signin-btn">Sign In</button>
                 </a>
+
+                <form method="POST" action="{{ route('filament.auth.auth.logout') }}">
+                    @csrf
+                    <button type="submit">Log out</button>
+                </form>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <span></span>
