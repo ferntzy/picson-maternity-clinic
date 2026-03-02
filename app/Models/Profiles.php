@@ -66,4 +66,12 @@ class Profiles extends Model
 
         return trim("{$first}{$middleInitial} {$last}");
     }
+
+    /**
+     * Alias for fullname attribute (used in selects/dropdowns)
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->fullname;
+    }
 }
