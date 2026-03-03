@@ -9,16 +9,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     protected $fillable = [
         'email',
         'password',
         'avatar',
         'profile_id',
+        'role_id',
     ];
 
     protected $hidden = [
@@ -45,6 +47,15 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
+     * Get the user's primary role record from Spatie
+     * Faster than roles()->first() as it uses the denormalized role_id
+     */
+    public function role()
+    {
+        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
+    }
+
+    /**
      * This is what Filament uses for display name (avatar dropdown, breadcrumbs, etc.)
      */
     public function getFilamentName(): string
@@ -67,33 +78,25 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * Get the user's role from their profile
+     * Get the user's primary role from Spatie
      */
     public function getRole(): ?string
     {
-        return $this->profile?->role;
+        return $this->roles()->first()?->name;
     }
 
     public function canAccessPanel(Panel $panel): bool
     {
-        $role = strtolower(trim($this->getRole() ?? ''));
-
         if ($panel->getId() === 'auth') {
             return true;
         }
 
-        // Allow the known seeded admin user into the admin panel
-        // even if their profile/role linkage is temporarily misconfigured.
-        if ($panel->getId() === 'admin' && $this->email === 'admin@example.com') {
-            return true;
-        }
-
         return match ($panel->getId()) {
-            'director' => $role === 'director',
-            'admin'    => $role === 'admin',
-            'doctor'   => $role === 'doctor',
-            'nurse'    => $role === 'nurse',
-            'patient'  => $role === 'patient',
+            'director' => $this->hasRole('director'),
+            'admin'    => $this->hasRole('admin'),
+            'doctor'   => $this->hasRole('doctor'),
+            'nurse'    => $this->hasRole('nurse'),
+            'patient'  => $this->hasRole('patient'),
             default    => false,
         };
     }
