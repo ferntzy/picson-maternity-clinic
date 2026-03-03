@@ -70,4 +70,27 @@ class Newborn extends Controller
             ], 500);
         }
     }
+
+    public function GetNewborns(Request $request)
+    {
+        try {
+            $patientId = $request->input('patientId');
+
+            $newborns = Newborns::with(['profile', 'delivery'])
+                ->whereHas('delivery', function ($query) use ($patientId) {
+                    $query->where('profile_id', $patientId); // mother's id
+                })
+                ->get();
+
+            return response()->json([
+                'newborns' => $newborns
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Unable to get newborns data',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
