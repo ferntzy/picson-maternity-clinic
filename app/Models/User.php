@@ -20,7 +20,6 @@ class User extends Authenticatable implements FilamentUser, HasName
         'password',
         'avatar',
         'profile_id',
-        // role_id is stored on linked profile rather than the user record
     ];
 
     protected $hidden = [
