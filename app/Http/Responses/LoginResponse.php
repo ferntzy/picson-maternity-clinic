@@ -17,10 +17,11 @@ class LoginResponse implements BaseLoginResponse
             return redirect()->to(Filament::getPanel('auth')->getLoginUrl());
         }
 
-        $role = strtolower(trim($user->getRole() ?? ''));
+        // Get the first (primary) role from Spatie
+        $role = $user->roles()->first()?->name;
+        $role = strtolower(trim($role ?? ''));
 
-        // Fallback: if role is missing but this is the seeded admin account,
-        // treat them as 'admin' so they are not bounced back to the login/landing page.
+        // Fallback for seeded admin
         if ($role === '' && $user->email === 'admin@example.com') {
             $role = 'admin';
         }
