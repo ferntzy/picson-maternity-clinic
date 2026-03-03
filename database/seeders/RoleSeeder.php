@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Roles;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -12,15 +13,20 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['admin', 'director', 'doctor', 'nurse', 'patient'];
-
-        foreach ($roles as $role) {
-            Role::firstOrCreate(
-                ['name' => $role],
-                ['guard_name' => 'web']
-            );
-        }
-
-        $this->command->info('Roles created successfully!');
+        Roles::create([
+            'name' => 'admin'
+        ]);
+        Roles::create([
+            'name' => 'doctor'
+        ]);
+        Roles::create([
+            'name' => 'nurse'
+        ]);
+        Roles::create([
+            'name' => 'patient'
+        ]);
+        Roles::create([
+            'name' => 'newborn'
+        ]);
     }
 }
