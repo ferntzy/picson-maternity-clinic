@@ -22,9 +22,15 @@ return new class extends Migration
             ->get();
 
         foreach ($records as $record) {
-            DB::table('users')
+            // update the corresponding profile rather than user
+            $profileId = DB::table('users')
                 ->where('id', $record->model_id)
-                ->update(['role_id' => $record->role_id]);
+                ->value('profile_id');
+            if ($profileId) {
+                DB::table('profiles')
+                    ->where('id', $profileId)
+                    ->update(['role_id' => $record->role_id]);
+            }
         }
     }
 

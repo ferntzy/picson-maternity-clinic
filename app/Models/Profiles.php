@@ -30,6 +30,7 @@ class Profiles extends Model
         'allergies',
         'contact_num',
         'role',
+        'role_id',
     ];
 
     protected $casts = [
@@ -83,5 +84,13 @@ class Profiles extends Model
     public function deliveries()
     {
         return $this->hasMany(\App\Models\Deliveries::class, 'profile_id');
+    }
+
+    /**
+     * Role assigned to this profile (denormalized for quick lookup)
+     */
+    public function role()
+    {
+        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
     }
 }

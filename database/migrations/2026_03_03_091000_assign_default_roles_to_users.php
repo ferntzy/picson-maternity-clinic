@@ -23,7 +23,10 @@ return new class extends Migration
             if ($patientRole) {
                 foreach ($usersWithoutRole as $user) {
                     $user->assignRole('patient');
-                    $user->update(['role_id' => $patientRole->id]);
+                    // populate profile.role_id instead of user
+                    if ($user->profile) {
+                        $user->profile->update(['role_id' => $patientRole->id]);
+                    }
                 }
 
                 $this->command->info("Assigned 'patient' role to {$usersWithoutRole->count()} users without roles.");
