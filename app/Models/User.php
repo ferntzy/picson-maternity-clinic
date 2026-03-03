@@ -20,7 +20,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'password',
         'avatar',
         'profile_id',
-        'role_id',
+        // role_id is stored on linked profile rather than the user record
     ];
 
     protected $hidden = [
@@ -47,12 +47,13 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * Get the user's primary role record from Spatie
-     * Faster than roles()->first() as it uses the denormalized role_id
+     * Accessor for the denormalized role stored on the related profile.
+     * This is kept primarily for quick lookups; Spatie still manages
+     * the true role relationship via the roles() trait method.
      */
-    public function role()
+    public function profileRole()
     {
-        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
+        return $this->profile?->role();
     }
 
     /**
@@ -82,6 +83,11 @@ class User extends Authenticatable implements FilamentUser, HasName
      */
     public function getRole(): ?string
     {
+        // prefer the denormalized profile relation if available
+        if ($this->profile && $this->profile->role) {
+            return $this->profile->role->name;
+        }
+
         return $this->roles()->first()?->name;
     }
 

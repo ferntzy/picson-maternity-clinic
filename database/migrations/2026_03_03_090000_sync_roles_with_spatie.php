@@ -14,10 +14,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Add a role_id column to users table for quick identification
-        if (!Schema::hasColumn('users', 'role_id')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->unsignedBigInteger('role_id')->nullable()->after('profile_id');
+        // Add a role_id column to profiles table for quick identification
+        if (!Schema::hasColumn('profiles', 'role_id')) {
+            Schema::table('profiles', function (Blueprint $table) {
+                $table->unsignedBigInteger('role_id')->nullable()->after('role');
                 $table->foreign('role_id')
                     ->references('id')
                     ->on('roles')
@@ -26,6 +26,7 @@ return new class extends Migration
         }
 
         // Migrate existing roles from profiles table to Spatie system
+        // (we also update the new profiles.role_id instead of users.role_id)
         $this->migrateExistingRoles();
     }
 
@@ -55,7 +56,7 @@ return new class extends Migration
         $usersWithRoles = DB::table('users')
             ->join('profiles', 'users.profile_id', '=', 'profiles.id')
             ->where('profiles.role', '!=', null)
-            ->select('users.id', 'profiles.role')
+            ->select('users.id', 'profiles.role', 'profiles.id as profile_id')
             ->get();
 
         // Assign roles via Spatie
@@ -65,10 +66,12 @@ return new class extends Migration
                 try {
                     $user->assignRole(strtolower(trim($record->role)));
 
-                    // Also set the role_id on users table for quick lookup
+                    // Also set the role_id on profiles table for quick lookup
                     $role = Role::where('name', strtolower(trim($record->role)))->first();
                     if ($role) {
-                        $user->update(['role_id' => $role->id]);
+                        DB::table('profiles')
+                            ->where('id', $record->profile_id)
+                            ->update(['role_id' => $role->id]);
                     }
                 } catch (\Exception $e) {
                     // Log error but continue
