@@ -14,3 +14,6 @@ Route::prefix('patient-profiles')->group(function(){
 
 //add delivery and new born record
 Route::post('/add-delivery-with-newborn-records', [Newborn::class, 'addNewbornRecord']);
+
+//get newborns
+Route::post('/get-newborns', [Newborn::class, 'GetNewborns']);

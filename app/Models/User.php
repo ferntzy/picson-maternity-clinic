@@ -36,10 +36,8 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function profile()
     {
         return $this->belongsTo(Profiles::class, 'profile_id');
-        // ↑ IMPORTANT: use Profile::class (singular), not Profiles::class
     }
-
-    // Optional alias (if old code still uses ->patient())
+    
     public function patient()
     {
         return $this->profile();
