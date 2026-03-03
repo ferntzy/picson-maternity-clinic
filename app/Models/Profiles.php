@@ -89,8 +89,8 @@ class Profiles extends Model
     /**
      * Role assigned to this profile (denormalized for quick lookup)
      */
-    public function role()
-    {
-        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
-    }
+    // public function role()
+    // {
+    //     return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
+    // }
 }
