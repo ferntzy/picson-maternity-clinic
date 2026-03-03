@@ -25,6 +25,7 @@ class ProfilesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->where('role', 'patient'))
             ->columns([
                 TextColumn::make('firstname')
                     ->label('Full Name')
@@ -185,15 +186,7 @@ class ProfilesTable
                                 ->rows(3),
                         ])
                         ->action(function (array $data, $record): void {
-                            // Assuming a hasMany relationship: Profile has many BirthEmergency records
-                            // Adjust according to your actual models/relationships
                             $record->birthEmergencies()?->create($data);
-
-                            // Alternative: if storing directly on profile
-                            // $record->update([
-                            //     'last_emergency_at' => $data['occurred_at'],
-                            //     'has_emergency_history' => true,
-                            // ]);
 
                             Notification::make()
                                 ->title('Birth emergency recorded successfully')
@@ -205,7 +198,7 @@ class ProfilesTable
                 ->icon('heroicon-m-ellipsis-vertical')
                 ->color('gray')
                 ->tooltip('Options')
-                ->iconButton(),  // This makes the 3-dots appear as proper round icon button
+                ->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

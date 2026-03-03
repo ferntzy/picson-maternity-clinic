@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('newborn_id')->nullable()->constrained('newborns')->nullOnDelete();
             $table->string('assessment_type');
             $table->string('item');
-            $table->string('value');
+            $table->text('value');
             $table->timestamps();
             $table->softDeletes();
         });

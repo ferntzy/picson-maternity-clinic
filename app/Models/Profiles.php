@@ -74,4 +74,10 @@ class Profiles extends Model
     {
         return $this->fullname;
     }
+
+    public function newborn()
+    {
+        return $this->hasOne(Newborns::class);
+    }
+
 }

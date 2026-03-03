@@ -14,17 +14,8 @@ return new class extends Migration
         Schema::create('newborns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('delivery_id')->nullable()->constrained('deliveries')->nullOnDelete();
-            $table->string('sex');
-            $table->decimal('birth_weight');
-            $table->string('firstname');
-            $table->string('middlename');
-            $table->string('lastname');
-            $table->dateTime('date_time_of_birth');
-            $table->decimal('head');
-            $table->decimal('chest');
-            $table->decimal('abdomen');
-            $table->decimal('length');
             $table->date('newborn_screening_done');
+            $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
