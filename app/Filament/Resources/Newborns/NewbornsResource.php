@@ -22,13 +22,14 @@ class NewbornsResource extends Resource
 {
     protected static ?string $model = Newborns::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserCircle;
 
     protected static ?string $recordTitleAttribute = 'newborns';
 
     public static function form(Schema $schema): Schema
     {
         return NewbornsForm::configure($schema);
+            
     }
 
     public static function infolist(Schema $schema): Schema
