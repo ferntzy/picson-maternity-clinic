@@ -24,6 +24,7 @@ class ProfilesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->where('role', 'patient'))
             ->columns([
                 TextColumn::make('firstname')
                     ->label('Full Name')
@@ -172,7 +173,6 @@ class ProfilesTable
                                 ->rows(3),
                         ])
                         ->action(function (array $data, $record): void {
-
                             $record->birthEmergencies()?->create($data);
 
                             Notification::make()

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class PatientProfile extends Controller
 {
     public function index(){
-        $patients = Profiles::get();
+        $patients = Profiles::where('role', 'patient')->get();
 
         return response()->json([
             'patients' => $patients

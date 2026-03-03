@@ -74,8 +74,14 @@ class Profiles extends Model
     {
         return $this->fullname;
     }
+
+    public function newborn()
+    {
+        return $this->hasOne(Newborns::class);
+    }
+
     public function deliveries()
-{
-    return $this->hasMany(\App\Models\Deliveries::class, 'profile_id');
-}
+    {
+        return $this->hasMany(\App\Models\Deliveries::class, 'profile_id');
+    }
 }
