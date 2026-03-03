@@ -160,8 +160,17 @@ class UserForm
                     ->collapsible()
                     ->visible(fn($record) => $record !== null) // Only show on edit
                     ->schema([
+                        Select::make('roles')
+                            ->label('Assign Role(s)')
+                            ->relationship('roles', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->hint('Assign one or more roles to this user'),
+
+                        // Keep profile.role for backward compatibility
                         Select::make('profile.role')
-                            ->label('Role')
+                            ->label('Profile Role (Legacy)')
                             ->options([
                                 'admin' => 'Admin',
                                 'director' => 'Director',

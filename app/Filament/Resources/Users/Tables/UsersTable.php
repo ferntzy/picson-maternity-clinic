@@ -14,7 +14,7 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->columns([  
+            ->columns([
                 ImageColumn::make('avatar')
                     ->label('Profile Picture')
                     ->disk('public')
@@ -30,7 +30,17 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email ')
                     ->searchable(),
-                TextColumn::make('role')
+                TextColumn::make('role.name')
+                    ->label('Role')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'admin' => 'danger',
+                        'director' => 'info',
+                        'doctor' => 'warning',
+                        'nurse' => 'success',
+                        'patient' => 'gray',
+                        default => 'gray',
+                    })
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
