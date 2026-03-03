@@ -13,14 +13,13 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     protected $fillable = [
         'email',
         'password',
         'avatar',
         'profile_id',
-        // role_id is stored on linked profile rather than the user record
     ];
 
     protected $hidden = [
