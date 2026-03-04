@@ -30,7 +30,7 @@ class PatientSeeder extends Seeder
             'blood_type' => 'A+',
             'allergies' => 'None',
             'contact_num' => '092837467577',
-            'role' => 'patient',
+            'role_id' => '5',
         ]);
     }
 }

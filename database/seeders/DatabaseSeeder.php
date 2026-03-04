@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
-            PatientSeeder::class,
             // NewbornsSeeder::class,
             ProfileSeeder::class,
             ModelHasRolesSeeder::class,
