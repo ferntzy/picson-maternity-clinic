@@ -77,7 +77,7 @@ class ProfileForm
 
                     TextInput::make('religion')
                         ->label('Religion')
-                        ->placeholder("Enter patient's birth place")
+                        ->placeholder("Enter patient's religion")
                         ->extraInputAttributes(['style' => 'height: 2.5rem; font-size: 0.875rem; padding:20px;'])
                         ->columnSpan(4),
 
