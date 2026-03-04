@@ -9,9 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->foreign('role_id')
-                ->references('id')
-                ->on('roles')
+            $table->foreignId('role_id')
+                ->nullable()
+                ->after('contact_num')
+                ->constrained('roles')
                 ->nullOnDelete();
         });
     }
@@ -20,6 +21,7 @@ return new class extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
+            $table->dropColumn('role_id');
         });
     }
 };
