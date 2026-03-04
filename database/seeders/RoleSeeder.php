@@ -17,6 +17,7 @@ class RoleSeeder extends Seeder
             ['id' => 3, 'name' => 'doctor',   'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
             ['id' => 4, 'name' => 'nurse',    'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
             ['id' => 5, 'name' => 'patient',  'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
+            ['id' => 6, 'name' => 'newborn', 'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now]
         ];
 
         DB::table('roles')->insertOrIgnore($roles);
