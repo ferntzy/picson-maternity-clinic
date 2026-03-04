@@ -14,6 +14,7 @@ class Deliveries extends Model
         'profile_id',
         'time_of_delivery',
         'type_of_delivery',
+        'attending_name'
     ];
 
     protected $casts = [

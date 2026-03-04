@@ -17,3 +17,4 @@ Route::post('/add-delivery-with-newborn-records', [Newborn::class, 'addNewbornRe
 
 //get newborns
 Route::post('/get-newborns', [Newborn::class, 'GetNewborns']);
+Route::post('/get-newborn-detail', [Newborn::class, 'GetNewbornDetail']);

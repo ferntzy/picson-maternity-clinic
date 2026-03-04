@@ -20,6 +20,8 @@ class NewbornsSeeder extends Seeder
         $delivery = Deliveries::create([
             'time_of_delivery' => '2025-02-27 14:30:00',
             'type_of_delivery' => 'normal',
+            'attending_name' => 'Rovic Bayot Jud',
+            'profile_id' => 1
         ]);
 
         $profile = Profiles::create([
