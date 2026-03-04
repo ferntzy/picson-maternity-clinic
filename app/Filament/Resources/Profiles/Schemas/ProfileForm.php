@@ -70,6 +70,7 @@ class ProfileForm
                             'single' => 'Single',
                             'married' => 'Married',
                             'widowed' => 'Widowed',
+                            'legally separated' => 'Legally Separated',
                         ])
                         ->default('Female')
                         ->extraInputAttributes(['style' => 'height: 2.5rem; font-size: 0.875rem;'])
