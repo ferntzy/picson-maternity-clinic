@@ -2,31 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\Models\Roles;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Roles::create([
-            'name' => 'admin'
-        ]);
-        Roles::create([
-            'name' => 'doctor'
-        ]);
-        Roles::create([
-            'name' => 'nurse'
-        ]);
-        Roles::create([
-            'name' => 'patient'
-        ]);
-        Roles::create([
-            'name' => 'newborn'
-        ]);
+        $now = '2026-03-03 00:03:53';
+
+        $roles = [
+            ['id' => 1, 'name' => 'admin',    'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
+            ['id' => 2, 'name' => 'director', 'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
+            ['id' => 3, 'name' => 'doctor',   'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
+            ['id' => 4, 'name' => 'nurse',    'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
+            ['id' => 5, 'name' => 'patient',  'guard_name' => 'web', 'created_at' => $now, 'updated_at' => $now],
+        ];
+
+        DB::table('roles')->insertOrIgnore($roles);
     }
 }
