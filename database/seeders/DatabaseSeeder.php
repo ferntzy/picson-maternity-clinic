@@ -16,10 +16,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
-            PermissionSeeder::class,
             UserSeeder::class,
             PatientSeeder::class,
-            NewbornsSeeder::class,
+            // NewbornsSeeder::class,
+            ProfileSeeder::class,
+            ModelHasRolesSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }
