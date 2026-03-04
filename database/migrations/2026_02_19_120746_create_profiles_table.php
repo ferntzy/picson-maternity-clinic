@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->string('firstname', 255);
-            $table->string('middlename', 255); 
+            $table->string('middlename', 255);
             $table->string('lastname', 255);
             $table->string('address', 255)->nullable();
             $table->string('sex', 255)->nullable();
@@ -29,7 +29,8 @@ return new class extends Migration
             $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->nullable();
             $table->string('allergies', 255)->nullable();
             $table->string('contact_num', 255)->nullable();
-            $table->string('role', 255)->nullable();
+            // nullable foreign key pointing to roles table; replaces previous string-based role column
+            $table->foreignId('role_id')->nullable()->constrained('roles')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
