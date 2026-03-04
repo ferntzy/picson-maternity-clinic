@@ -93,4 +93,30 @@ class Newborn extends Controller
             ], 500);
         }
     }
+
+    public function GetNewbornDetail(Request $request){
+    try {
+        $id = $request->input("newbornId");
+        $pid = Newborns::where('id', $id)->value('profile_id');
+
+        $rows = NewbornRecordData::where('newborn_id', $id)->get();
+
+        $detail = (object) $rows->mapWithKeys(function ($row) {
+            return [$row->item => $row->value];
+        })->toArray();
+
+        $profile_details = Profiles::where('id', $pid)->first();
+
+        return response()->json([
+            'detail'          => $detail,
+            'profile_details' => $profile_details,
+        ], 200);
+
+    } catch (Exception $e) {
+        return response()->json([
+            'message' => 'Unable to get newborn detail',
+            'error'   => $e->getMessage(),
+        ], 500);
+    }
+}
 }

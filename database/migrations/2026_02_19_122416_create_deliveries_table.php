@@ -16,6 +16,7 @@ return new class extends Migration
             $table->dateTime('time_of_delivery')->nullable();
             $table->enum('type_of_delivery', ['normal', 'cesarean'])->nullable();
             $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
+            $table->string('attending_name');
             $table->timestamps();
             $table->softDeletes();
         });
