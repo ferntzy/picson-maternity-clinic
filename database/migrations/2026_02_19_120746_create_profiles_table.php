@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('profiles', function (Blueprint $table) {
@@ -27,17 +24,13 @@ return new class extends Migration
             $table->string('emergency_contact_number', 255)->nullable();
             $table->string('philhealth_number', 255)->nullable();
             $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->nullable();
-            $table->string('allergies', 255)->nullable();
-            $table->string('contact_num', 255)->nullable();
-            $table->string('role', 255)->nullable();
+            $table->string('allergies')->nullable();
+            $table->string('contact_num')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('profiles');

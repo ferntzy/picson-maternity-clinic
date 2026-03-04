@@ -172,7 +172,6 @@ class ProfilesTable
                                 ->rows(3),
                         ])
                         ->action(function (array $data, $record): void {
-
                             $record->birthEmergencies()?->create($data);
 
                             Notification::make()

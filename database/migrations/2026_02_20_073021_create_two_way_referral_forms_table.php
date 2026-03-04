@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('two_way_referral_forms', function (Blueprint $table) {
             $table->id();
             $table->text('reason_for_referral');
-            $table->string('reffered_to'); // keeping your spelling
+            $table->string('reffered_to');
             $table->boolean('patient_category');
             $table->string('health_insurance');
             $table->boolean('charity');
@@ -22,9 +22,9 @@ return new class extends Migration
             $table->integer('diastolic_bp');
             $table->integer('pulse_rate');
             $table->integer('respiratory_rate');
-            $table->decimal('temperature', 5, 2);
+            $table->decimal('temperature', 8, 2);
             $table->decimal('weight', 8, 2);
-            $table->string('reffered_by'); // keeping your spelling
+            $table->string('referred_by');
             $table->string('designation');
             $table->string('contact_number');
             $table->timestamps();

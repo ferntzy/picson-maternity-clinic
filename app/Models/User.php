@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     protected $fillable = [
         'email',
@@ -35,13 +36,21 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function profile()
     {
         return $this->belongsTo(Profiles::class, 'profile_id');
-        // ↑ IMPORTANT: use Profile::class (singular), not Profiles::class
     }
-
-    // Optional alias (if old code still uses ->patient())
+    
     public function patient()
     {
         return $this->profile();
+    }
+
+    /**
+     * Accessor for the denormalized role stored on the related profile.
+     * This is kept primarily for quick lookups; Spatie still manages
+     * the true role relationship via the roles() trait method.
+     */
+    public function profileRole()
+    {
+        return $this->profile?->role();
     }
 
     /**
@@ -67,33 +76,30 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * Get the user's role from their profile
+     * Get the user's primary role from Spatie
      */
     public function getRole(): ?string
     {
-        return $this->profile?->role;
+        // prefer the denormalized profile relation if available
+        if ($this->profile && $this->profile->role) {
+            return $this->profile->role->name;
+        }
+
+        return $this->roles()->first()?->name;
     }
 
     public function canAccessPanel(Panel $panel): bool
     {
-        $role = strtolower(trim($this->getRole() ?? ''));
-
         if ($panel->getId() === 'auth') {
             return true;
         }
 
-        // Allow the known seeded admin user into the admin panel
-        // even if their profile/role linkage is temporarily misconfigured.
-        if ($panel->getId() === 'admin' && $this->email === 'admin@example.com') {
-            return true;
-        }
-
         return match ($panel->getId()) {
-            'director' => $role === 'director',
-            'admin'    => $role === 'admin',
-            'doctor'   => $role === 'doctor',
-            'nurse'    => $role === 'nurse',
-            'patient'  => $role === 'patient',
+            'director' => $this->hasRole('director'),
+            'admin'    => $this->hasRole('admin'),
+            'doctor'   => $this->hasRole('doctor'),
+            'nurse'    => $this->hasRole('nurse'),
+            'patient'  => $this->hasRole('patient'),
             default    => false,
         };
     }

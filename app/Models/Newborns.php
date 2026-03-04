@@ -14,15 +14,7 @@ class Newborns extends Model
 
     protected $fillable = [
         'delivery_id',
-        'firstname',
-        'middlename',
-        'lastname',
-        'sex',
-        'birth_weight',
-        'length',
-        'head',
-        'chest',
-        'abdomen',
+        'profile_id',
         'date_time_of_birth',
         'newborn_screening_done',
     ];
@@ -40,5 +32,10 @@ class Newborns extends Model
     public function newborn_record_data()
     {
         return $this->hasMany(NewbornRecordData::class, 'newborn_id');
+    }
+
+    public function profile()
+    {
+        return $this->belongsTo(Profiles::class);
     }
 }

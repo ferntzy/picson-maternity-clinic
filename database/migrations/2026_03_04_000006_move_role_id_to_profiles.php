@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('profile_id')
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->foreign('role_id')
                 ->references('id')
-                ->on('profiles')
+                ->on('roles')
                 ->nullOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['profile_id']);
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->dropForeign(['role_id']);
         });
     }
 };
