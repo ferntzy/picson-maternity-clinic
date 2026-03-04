@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('acknowledgement_receipts', function (Blueprint $table) {
@@ -16,9 +13,9 @@ return new class extends Migration
             $table->foreignId('referral_form_id')->nullable()->constrained('two_way_referral_forms')->nullOnDelete();
             $table->date('date');
             $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
-            $table->string('status_upon_receipt_at_er');
-            $table->enum('actions_taken', ['admitted', 'referred to other facility', 'manage as opd']);
-            $table->string('receiving_hospital');
+            $table->string('statis_upon_receipt_at_er'); // keeping original column name
+            $table->enum('actions_taken', ['admitted', 'reffered to other facility', 'manage as opd']);
+            $table->string('receiving_hostpital'); // keeping original column name
             $table->string('contact_person');
             $table->string('contact_number');
             $table->timestamps();
@@ -26,9 +23,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('acknowledgement_receipts');

@@ -6,15 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->dateTime('time_of_delivery')->nullable();
-            $table->enum('type_of_delivery', ['normal', 'cesarean'])->nullable();
+            $table->string('type_of_delivery')->nullable();
             $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
             $table->string('attending_name');
             $table->timestamps();
@@ -22,9 +19,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('deliveries');

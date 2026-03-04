@@ -18,7 +18,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             PatientSeeder::class,
-            NewbornsSeeder::class,
+            // NewbornsSeeder::class,
+            ProfileSeeder::class,
+            ModelHasRolesSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }
