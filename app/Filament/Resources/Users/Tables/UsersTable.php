@@ -30,7 +30,7 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email ')
                     ->searchable(),
-                TextColumn::make('role.name')
+                TextColumn::make('profile.role')
                     ->label('Role')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
